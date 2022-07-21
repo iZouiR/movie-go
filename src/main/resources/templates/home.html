@@ -1,12 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="java">
 <head>
     <meta charset="UTF-8">
-    <title>Home Page</title>
+    <title>MovieGo</title>
 </head>
 <body>
 
-<h1>Home Page</h1>
+<h1>MovieGo</h1>
+
+<form th:method="POST" th:action="@{/searchForMovies}" th:object="${movieName}">
+    <label>
+        <input name="movieName" type="text" th:value="${movieName}">
+    </label>
+    <input type="submit" value="search">
+</form>
+
+<br><br>
+
+<table>
+    <tr th:each="movie : ${movies}" th:unless="${movies.isEmpty()}">
+        <td><p th:text="${movie.getMovieName()}"/></td>
+        <td><p th:text="${movie.getAuthor()}"/></td>
+    </tr>
+</table>
+
+<h3 th:unless="${!movies.isEmpty()}">Ничего не найдено...</h3>
 
 </body>
 </html>
