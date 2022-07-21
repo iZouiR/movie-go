@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="java">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${movie.getMovieName()}+' ('+${movie.getYear()}+')'"></title>
+</head>
+<body>
+
+<h1 th:text="${movie.getMovieName()}"></h1>
+
+<br><br>
+
+<b>Описание : </b>
+<b th:text="${movie.getDescription()}"></b>
+<br>
+<b>Автор : </b>
+<b th:text="${movie.getAuthor()}"></b>
+<br>
+<b>Год выпуска : </b>
+<b th:text="${movie.getYear()}"></b>
+<br>
+<b>Рейтинг : </b>
+<b th:text="${movie.getRate()}"></b>
+<br>
+<b>Просмотров : </b>
+<b th:text="${movie.getViews()}"></b>
+
+</body>
+</html>

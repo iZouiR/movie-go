@@ -20,7 +20,9 @@
 
 <table>
     <tr th:each="movie : ${movies}" th:unless="${movies.isEmpty()}">
-        <td><p th:text="${movie.getMovieName()}"/></td>
+        <td>
+            <a th:href="@{/{linkTitle}(linkTitle=${movie.getMovieName()})}" th:method="GET" th:text="${movie.getMovieName()}"></a>
+        </td>
         <td><p th:text="${movie.getAuthor()}"/></td>
     </tr>
 </table>

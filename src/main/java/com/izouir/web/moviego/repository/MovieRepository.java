@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface MovieRepository {
 
+    Movie findByMovieName(String movieName);
     List<Movie> findByMovieNameLikeIgnoreCaseOrderByRate(String movieName);
+    void incrementViewsForMovie(String movieName);
 
 }

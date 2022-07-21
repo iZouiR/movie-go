@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface MovieService {
 
-    List<Movie> searchForMovies(String movieName);
+    Movie getMovie(String movieName);
+    List<Movie> getMoviesLike(String movieName);
+    void incrementViewsForMovie(String movieName);
 
 }
