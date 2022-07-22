@@ -7,6 +7,17 @@
 </head>
 <body>
 
+<h2 th:unless="${#httpServletRequest.remoteUser} == null" th:text="'Hello, '+${#httpServletRequest.remoteUser}"></h2>
+<form th:unless="${#httpServletRequest.remoteUser} != null" th:action="@{/login}" th:method="GET">
+    <input type="submit" value="Log in"/>
+</form>
+<form th:unless="${#httpServletRequest.remoteUser} != null" th:action="@{/register}" th:method="GET">
+    <input type="submit" value="Register"/>
+</form>
+<form th:unless="${#httpServletRequest.remoteUser} == null" th:action="@{/logout}" th:method="POST">
+    <input type="submit" value="Log out"/>
+</form>
+
 <h1>MovieGo</h1>
 
 <form th:method="POST" th:action="@{/searchForMovies}" th:object="${movieName}">
@@ -21,7 +32,8 @@
 <table>
     <tr th:each="movie : ${movies}" th:unless="${movies.isEmpty()}">
         <td>
-            <a th:href="@{/{linkTitle}(linkTitle=${movie.getMovieName()})}" th:method="GET" th:text="${movie.getMovieName()}"></a>
+            <a th:href="@{/{linkTitle}(linkTitle=${movie.getMovieName()})}" th:method="GET"
+               th:text="${movie.getMovieName()}"></a>
         </td>
         <td><p th:text="${movie.getAuthor()}"/></td>
     </tr>

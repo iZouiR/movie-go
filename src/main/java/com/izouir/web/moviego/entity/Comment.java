@@ -20,7 +20,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comment_id_generator")
     @SequenceGenerator(name = "comment_id_generator", sequenceName = "comment_id_generator", allocationSize = 1)
     @Column(name = "id")
-    private int id;
+    private long id;
 
     @Column(name = "body")
     private String body;
@@ -42,11 +42,11 @@ public class Comment {
         this.movie = movie;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-public class UserController {
+public class MainController {
 
     private final MovieService MOVIE_SERVICE;
 
     private String currentMovieName = "";
 
-    public UserController(@Autowired MovieService MOVIE_SERVICE) {
+    public MainController(@Autowired MovieService MOVIE_SERVICE) {
         this.MOVIE_SERVICE = MOVIE_SERVICE;
     }
 
@@ -41,5 +41,4 @@ public class UserController {
         model.addAttribute("movie", movie);
         return "movie";
     }
-
 }
