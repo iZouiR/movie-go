@@ -6,8 +6,11 @@ import java.util.List;
 
 public interface MovieService {
 
-    Movie getMovie(String movieName);
+    Movie getMovie(Long movieId);
+    void incrementViewsForMovie(Long movieId);
+    void decrementViewsForMovie(Long movieId);
     List<Movie> getMoviesLike(String movieName);
-    void incrementViewsForMovie(String movieName);
+    void doRateMovie(Long movieId, Long userId, Double rate);
+    void undoRateMovie(Long movieId, Long userId);
 
 }

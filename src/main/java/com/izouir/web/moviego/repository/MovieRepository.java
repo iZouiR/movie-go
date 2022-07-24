@@ -6,8 +6,12 @@ import java.util.List;
 
 public interface MovieRepository {
 
-    Movie findByMovieName(String movieName);
+    Movie findById(Long movieId);
+    void incrementViewsForMovie(Long movieId);
+    void decrementViewsForMovie(Long movieId);
     List<Movie> findByMovieNameLikeIgnoreCaseOrderByRate(String movieName);
-    void incrementViewsForMovie(String movieName);
+    void setMovieRate(Long movieId, Double movieRate);
+    void doRateMovie(Long movieId, Long userId, Double rate);
+    void undoRateMovie(Long movieId, Long userId);
 
 }

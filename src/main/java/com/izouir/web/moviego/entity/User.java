@@ -44,6 +44,10 @@ public class User {
 
     @OneToMany
     @JoinColumn(name = "user_id")
+    private List<Rate> rates;
+
+    @OneToMany
+    @JoinColumn(name = "user_id")
     private List<Comment> comments;
 
     public User() {
@@ -55,6 +59,7 @@ public class User {
         this.password = password;
         this.enabled = enabled;
         this.authorities = new ArrayList<>();
+        this.rates = new ArrayList<>();
         this.comments = new ArrayList<>();
     }
 
@@ -96,6 +101,14 @@ public class User {
 
     public void setAuthorities(List<Authority> authorities) {
         this.authorities = authorities;
+    }
+
+    public List<Rate> getRates() {
+        return rates;
+    }
+
+    public void setRates(List<Rate> rates) {
+        this.rates = rates;
     }
 
     public List<Comment> getComments() {

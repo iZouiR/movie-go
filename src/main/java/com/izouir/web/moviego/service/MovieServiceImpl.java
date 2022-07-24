@@ -1,6 +1,7 @@
 package com.izouir.web.moviego.service;
 
 import com.izouir.web.moviego.entity.Movie;
+import com.izouir.web.moviego.entity.Rate;
 import com.izouir.web.moviego.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,14 +14,38 @@ public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository MOVIE_REPOSITORY;
 
+    private Double calculateMovieRate(Long movieId) {
+        double movieRate = 0;
+        List<Rate> rates = MOVIE_REPOSITORY.findById(movieId).getRates();
+        if (!rates.isEmpty()) {
+            for (Rate forRate : rates) {
+                movieRate += forRate.getRate();
+            }
+            movieRate /= rates.size();
+        }
+        return movieRate;
+    }
+
     public MovieServiceImpl(@Autowired MovieRepository movieRepository) {
         this.MOVIE_REPOSITORY = movieRepository;
     }
 
     @Override
     @Transactional
-    public Movie getMovie(String movieName) {
-        return MOVIE_REPOSITORY.findByMovieName(movieName);
+    public Movie getMovie(Long movieId) {
+        return MOVIE_REPOSITORY.findById(movieId);
+    }
+
+    @Override
+    @Transactional
+    public void incrementViewsForMovie(Long movieId) {
+        MOVIE_REPOSITORY.incrementViewsForMovie(movieId);
+    }
+
+    @Override
+    @Transactional
+    public void decrementViewsForMovie(Long movieId) {
+        MOVIE_REPOSITORY.decrementViewsForMovie(movieId);
     }
 
     @Override
@@ -31,7 +56,15 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     @Transactional
-    public void incrementViewsForMovie(String movieName) {
-        MOVIE_REPOSITORY.incrementViewsForMovie(movieName);
+    public void doRateMovie(Long movieId, Long userId, Double rate) {
+        MOVIE_REPOSITORY.doRateMovie(movieId, userId, rate);
+        MOVIE_REPOSITORY.setMovieRate(movieId, calculateMovieRate(movieId));
+    }
+
+    @Override
+    @Transactional
+    public void undoRateMovie(Long movieId, Long userId) {
+        MOVIE_REPOSITORY.undoRateMovie(movieId, userId);
+        MOVIE_REPOSITORY.setMovieRate(movieId, calculateMovieRate(movieId));
     }
 }

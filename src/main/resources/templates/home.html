@@ -7,20 +7,20 @@
 </head>
 <body>
 
-<h2 th:unless="${#httpServletRequest.remoteUser} == null" th:text="'Hello, '+${#httpServletRequest.remoteUser}"></h2>
-<form th:unless="${#httpServletRequest.remoteUser} != null" th:action="@{/login}" th:method="GET">
+<h2 th:if="${#httpServletRequest.remoteUser} != null" th:text="'Hello, '+${#httpServletRequest.remoteUser}"></h2>
+<form th:if="${#httpServletRequest.remoteUser} == null" th:action="@{/login}" th:method="GET">
     <input type="submit" value="Log in"/>
 </form>
-<form th:unless="${#httpServletRequest.remoteUser} != null" th:action="@{/register}" th:method="GET">
+<form th:if="${#httpServletRequest.remoteUser} == null" th:action="@{/register}" th:method="GET">
     <input type="submit" value="Register"/>
 </form>
-<form th:unless="${#httpServletRequest.remoteUser} == null" th:action="@{/logout}" th:method="POST">
+<form th:if="${#httpServletRequest.remoteUser} != null" th:action="@{/logout}" th:method="POST">
     <input type="submit" value="Log out"/>
 </form>
 
 <h1>MovieGo</h1>
 
-<form th:method="POST" th:action="@{/searchForMovies}" th:object="${movieName}">
+<form th:method="POST" th:action="@{/movie/search}" th:object="${movieName}">
     <label>
         <input name="movieName" type="text" th:value="${movieName}">
     </label>
@@ -30,16 +30,17 @@
 <br><br>
 
 <table>
-    <tr th:each="movie : ${movies}" th:unless="${movies.isEmpty()}">
+    <tr th:each="movie : ${movies}" th:if="${!movies.isEmpty()}">
         <td>
-            <a th:href="@{/{linkTitle}(linkTitle=${movie.getMovieName()})}" th:method="GET"
+            <a th:href="@{/movie/{linkTitle}(linkTitle=${movie.getId()})}" th:method="GET"
                th:text="${movie.getMovieName()}"></a>
         </td>
+        <td><p th:text="${movie.getRate()}"></p></td>
         <td><p th:text="${movie.getAuthor()}"/></td>
     </tr>
 </table>
 
-<h3 th:unless="${!movies.isEmpty()}">Ничего не найдено...</h3>
+<h3 th:if="${movies.isEmpty()}">Ничего не найдено...</h3>
 
 </body>
 </html>

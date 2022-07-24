@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="java">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${movie.getMovieName()}+' ('+${movie.getYear()}+')'"></title>
+</head>
+<body>
+
+<h1 th:text="${movie.getMovieName()}"></h1>
+
+<br><br>
+
+<b>Описание : </b>
+<b th:text="${movie.getDescription()}"></b>
+<br>
+<b>Автор : </b>
+<b th:text="${movie.getAuthor()}"></b>
+<br>
+<b>Год выпуска : </b>
+<b th:text="${movie.getYear()}"></b>
+<br>
+<b>Рейтинг : </b>
+<b th:text="${movie.getRate()}"></b>
+<br>
+<b>Просмотров : </b>
+<b th:text="${movie.getViews()}"></b>
+
+<div th:if="${#httpServletRequest.remoteUser} != null">
+    <form th:if="${!movie.isRatedByUsername(#httpServletRequest.getRemoteUser())}" th:action="@{/movie/doRate}"
+          th:method="POST">
+        <input name="movieId" type="hidden" th:value="${movie.getId()}">
+        <input name="username" type="hidden" th:value="${#httpServletRequest.getRemoteUser()}">
+        <label><input name="rate" type="radio" th:value="1">1</label>
+        <label><input name="rate" type="radio" th:value="2">2</label>
+        <label><input name="rate" type="radio" th:value="3">3</label>
+        <label><input name="rate" type="radio" th:value="4">4</label>
+        <label><input name="rate" type="radio" th:value="5">5</label>
+        <label><input name="rate" type="radio" th:value="6">6</label>
+        <label><input name="rate" type="radio" th:value="7">7</label>
+        <label><input name="rate" type="radio" th:value="8">8</label>
+        <label><input name="rate" type="radio" th:value="9">9</label>
+        <label><input name="rate" type="radio" th:value="10">10</label>
+        <input type="submit" th:value="Rate">
+    </form>
+</div>
+
+<div th:if="${#httpServletRequest.remoteUser} != null">
+    <form th:if="${movie.isRatedByUsername(#httpServletRequest.getRemoteUser())}" th:action="@{/movie/undoRate}"
+          th:method="POST">
+        <input name="movieId" type="hidden" th:value="${movie.getId()}">
+        <input name="username" type="hidden" th:value="${#httpServletRequest.getRemoteUser()}">
+        <b>Ваша оценка - </b>
+        <b th:text="${movie.getRateByUsername(#httpServletRequest.getRemoteUser()).getRate()}"></b>
+        <input type="submit" th:value="Undo">
+    </form>
+</div>
+
+</body>
+</html>

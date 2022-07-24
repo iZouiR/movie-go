@@ -40,8 +40,9 @@ public class Movie {
     @Column(name = "rate")
     private double rate;
 
-    @Column(name = "rated")
-    private int rated;
+    @OneToMany
+    @JoinColumn(name = "movie_id")
+    private List<Rate> rates;
 
     @OneToMany
     @JoinColumn(name = "movie_id")
@@ -51,14 +52,14 @@ public class Movie {
         this.comments = new ArrayList<>();
     }
 
-    public Movie(String movieName, String author, String description, int year, int views, double rate, int rated) {
+    public Movie(String movieName, String author, String description, int year, int views, double rate) {
         this.movieName = movieName;
         this.author = author;
         this.description = description;
         this.year = year;
         this.views = views;
         this.rate = rate;
-        this.rated = rated;
+        this.rates = new ArrayList<>();
         this.comments = new ArrayList<>();
     }
 
@@ -118,12 +119,12 @@ public class Movie {
         this.rate = rate;
     }
 
-    public int getRated() {
-        return rated;
+    public List<Rate> getRates() {
+        return rates;
     }
 
-    public void setRated(int rated) {
-        this.rated = rated;
+    public void setRates(List<Rate> rates) {
+        this.rates = rates;
     }
 
     public List<Comment> getComments() {
@@ -132,5 +133,27 @@ public class Movie {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public Rate getRateByUsername(String username) {
+        Rate returnRate = new Rate();
+        for (Rate forRate : getRates()) {
+            if (forRate.getUser().getUsername().equals(username)) {
+                returnRate = forRate;
+                break;
+            }
+        }
+        return returnRate;
+    }
+
+    public boolean isRatedByUsername(String username) {
+        boolean returnBoolean = false;
+        for (Rate forRate : getRates()) {
+            if (forRate.getUser().getUsername().equals(username)) {
+                returnBoolean = true;
+                break;
+            }
+        }
+        return returnBoolean;
     }
 }
