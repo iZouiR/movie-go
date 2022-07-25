@@ -12,5 +12,6 @@ public interface MovieService {
     List<Movie> getMoviesLike(String movieName);
     void doRateMovie(Long movieId, Long userId, Double rate);
     void undoRateMovie(Long movieId, Long userId);
-
+    void updateMovieAddComment(Long movieIdAsLong, Long userId, String comment);
+    void updateMovieDeleteComment(Long commentIdAsLong);
 }

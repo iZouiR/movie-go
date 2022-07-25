@@ -56,5 +56,33 @@
     </form>
 </div>
 
+<br><br>
+
+<div th:if="${#httpServletRequest.getRemoteUser()} != null">
+    <form th:action="@{/movie/comment}" th:method="POST">
+        <input name="movieId" type="hidden" th:value="${movie.getId()}">
+        <input name="username" type="hidden" th:value="${#httpServletRequest.getRemoteUser()}">
+        <label><input name="comment" type="text"></label>
+        <input type="submit" th:value="Submit">
+    </form>
+</div>
+
+<br>
+
+<table>
+    <tr th:each="comment : ${movie.getComments()}" th:if="${!movie.getComments().isEmpty()}">
+        <td><p th:text="${comment.getUser().getUsername()}"></p></td>
+        <td><p th:text="${comment.getBody()}"/></td>
+        <td><form th:if="${comment.isSubmittedByUsername(#httpServletRequest.getRemoteUser())}"
+                  th:action="@{/movie/uncomment}" th:method="POST">
+            <input name="movieId" type="hidden" th:value="${movie.getId()}">
+            <input name="username" type="hidden" th:value="${#httpServletRequest.getRemoteUser()}">
+            <input name="commentId" type="hidden" th:value="${comment.getId()}">
+            <input type="submit" th:value="delete">
+        </form></td>
+        <td><br><br></td>
+    </tr>
+</table>
+
 </body>
 </html>

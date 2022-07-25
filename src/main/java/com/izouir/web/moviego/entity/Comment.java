@@ -73,4 +73,8 @@ public class Comment {
     public void setMovie(Movie movie) {
         this.movie = movie;
     }
+
+    public boolean isSubmittedByUsername(String username) {
+        return getUser().getUsername().equals(username);
+    }
 }

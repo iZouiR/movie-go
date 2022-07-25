@@ -61,4 +61,17 @@ public class MovieRepositoryImpl implements MovieRepository {
         Query query = ENTITY_MANAGER.createNativeQuery("DELETE FROM RATES WHERE MOVIE_ID = " + movieId + " AND USER_ID = " + userId);
         query.executeUpdate();
     }
+
+    @Override
+    public void addMovieComment(Long movieIdAsLong, Long userId, String comment) {
+        Query query = ENTITY_MANAGER.createNativeQuery("INSERT INTO COMMENTS (MOVIE_ID, USER_ID, BODY) " +
+                "VALUES (" + movieIdAsLong + ", " + userId + ", '" + comment + "')");
+        query.executeUpdate();
+    }
+
+    @Override
+    public void deleteMovieComment(Long commentId) {
+        Query query = ENTITY_MANAGER.createNativeQuery("DELETE FROM COMMENTS WHERE ID = " + commentId);
+        query.executeUpdate();
+    }
 }

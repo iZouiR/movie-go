@@ -13,5 +13,6 @@ public interface MovieRepository {
     void setMovieRate(Long movieId, Double movieRate);
     void doRateMovie(Long movieId, Long userId, Double rate);
     void undoRateMovie(Long movieId, Long userId);
-
+    void addMovieComment(Long movieId, Long userId, String comment);
+    void deleteMovieComment(Long commentId);
 }

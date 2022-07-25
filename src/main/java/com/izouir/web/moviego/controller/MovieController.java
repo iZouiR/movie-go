@@ -87,4 +87,36 @@ public class MovieController {
 
         return "redirect:/movie/" + movieIdAsString;
     }
+
+    @PostMapping("/comment")
+    public String addComment(@ModelAttribute("movieId") String movieIdAsString,
+                             @ModelAttribute("username") String username,
+                             @ModelAttribute("comment") String comment, Model model) {
+        Long movieIdAsLong = Long.parseLong(movieIdAsString);
+        User user = USER_SERVICE.getUser(username);
+        Long userId = user.getId();
+
+        MOVIE_SERVICE.updateMovieAddComment(movieIdAsLong, userId, comment);
+
+        Movie movie = MOVIE_SERVICE.getMovie(movieIdAsLong);
+        model.addAttribute("movie", movie);
+        model.addAttribute("rate", "");
+
+        return "redirect:/movie/" + movieIdAsString;
+    }
+
+    @PostMapping("/uncomment")
+    public String deleteComment(@ModelAttribute("movieId") String movieIdAsString,
+                                @ModelAttribute("commentId") String commentIdAsString, Model model) {
+        Long movieIdAsLong = Long.parseLong(movieIdAsString);
+        Long commentIdAsLong = Long.parseLong(commentIdAsString);
+
+        MOVIE_SERVICE.updateMovieDeleteComment(commentIdAsLong);
+
+        Movie movie = MOVIE_SERVICE.getMovie(movieIdAsLong);
+        model.addAttribute("movie", movie);
+        model.addAttribute("rate", "");
+
+        return "redirect:/movie/" + movieIdAsString;
+    }
 }

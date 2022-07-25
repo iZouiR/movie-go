@@ -67,4 +67,16 @@ public class MovieServiceImpl implements MovieService {
         MOVIE_REPOSITORY.undoRateMovie(movieId, userId);
         MOVIE_REPOSITORY.setMovieRate(movieId, calculateMovieRate(movieId));
     }
+
+    @Override
+    @Transactional
+    public void updateMovieAddComment(Long movieId, Long userId, String comment) {
+        MOVIE_REPOSITORY.addMovieComment(movieId, userId, comment);
+    }
+
+    @Override
+    @Transactional
+    public void updateMovieDeleteComment(Long commentId) {
+        MOVIE_REPOSITORY.deleteMovieComment(commentId);
+    }
 }
