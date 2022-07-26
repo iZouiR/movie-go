@@ -15,15 +15,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "comments")
 public class Comment {
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comment_id_generator")
     @SequenceGenerator(name = "comment_id_generator", sequenceName = "comment_id_generator", allocationSize = 1)
     @Column(name = "id")
     private long id;
 
-    @Column(name = "body")
-    private String body;
+    @Column(name = "content")
+    private String content;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
@@ -36,8 +35,8 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(String body, User user, Movie movie) {
-        this.body = body;
+    public Comment(String content, User user, Movie movie) {
+        this.content = content;
         this.user = user;
         this.movie = movie;
     }
@@ -50,12 +49,12 @@ public class Comment {
         this.id = id;
     }
 
-    public String getBody() {
-        return body;
+    public String getContent() {
+        return content;
     }
 
-    public void setBody(String body) {
-        this.body = body;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public User getUser() {
@@ -72,9 +71,5 @@ public class Comment {
 
     public void setMovie(Movie movie) {
         this.movie = movie;
-    }
-
-    public boolean isSubmittedByUsername(String username) {
-        return getUser().getUsername().equals(username);
     }
 }

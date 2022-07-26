@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org" lang="java">
+      xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Авторизация</title>
+    <title>Authorization</title>
 </head>
+
 <body>
-<div th:if="${param.error}">Неверные логин или пароль</div>
-<form th:action="@{/login}" th:method="POST" th:object="${user}">
-    <label>Логин : <input type="text" name="username"/></label>
-    <br>
-    <label>Пароль : <input type="password" name="password"/></label>
-    <br>
-    <input type="submit" value="Log in"/>
+<div th:if="${param.error}">username or password are invalid</div>
+<form th:action="@{/login}" th:method="POST">
+    <label>username : <input name="username" type="text"/></label>
+    <br><label>password : <input name="password" type="password"/></label>
+    <br><input type="submit" value="Log In"/>
 </form>
 </body>
+
 </html>

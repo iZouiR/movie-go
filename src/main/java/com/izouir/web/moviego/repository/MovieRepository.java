@@ -3,16 +3,16 @@ package com.izouir.web.moviego.repository;
 import com.izouir.web.moviego.entity.Movie;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MovieRepository {
+    Optional<Movie> findById(Long id);
 
-    Movie findById(Long movieId);
-    void incrementViewsForMovie(Long movieId);
-    void decrementViewsForMovie(Long movieId);
-    List<Movie> findByMovieNameLikeIgnoreCaseOrderByRate(String movieName);
-    void setMovieRate(Long movieId, Double movieRate);
-    void doRateMovie(Long movieId, Long userId, Double rate);
-    void undoRateMovie(Long movieId, Long userId);
-    void addMovieComment(Long movieId, Long userId, String comment);
-    void deleteMovieComment(Long commentId);
+    Optional<List<Movie>> findByTitleLikeIgnoreCaseOrderByRatingDesc(String title);
+
+    void updateByIdIncrementViews(Long id);
+
+    void updateByIdDecrementViews(Long id);
+
+    void updateByIdSetRating(Long id, Double rating);
 }

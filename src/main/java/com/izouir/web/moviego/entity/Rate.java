@@ -13,7 +13,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "rates")
 public class Rate {
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rate_id_generator")
     @SequenceGenerator(name = "rate_id_generator", sequenceName = "rate_id_generator", allocationSize = 1)
@@ -21,22 +20,23 @@ public class Rate {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "movie_id")
-    private Movie movie;
-
-    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "rate")
-    private double rate;
+    @ManyToOne
+    @JoinColumn(name = "movie_id")
+    private Movie movie;
 
-    public Rate() {}
+    @Column(name = "points")
+    private int points;
 
-    public Rate(User user, Movie movie, double rate) {
+    public Rate() {
+    }
+
+    public Rate(User user, Movie movie, int points) {
         this.user = user;
         this.movie = movie;
-        this.rate = rate;
+        this.points = points;
     }
 
     public long getId() {
@@ -47,14 +47,6 @@ public class Rate {
         this.id = id;
     }
 
-    public Movie getMovie() {
-        return movie;
-    }
-
-    public void setMovie(Movie movie) {
-        this.movie = movie;
-    }
-
     public User getUser() {
         return user;
     }
@@ -63,11 +55,19 @@ public class Rate {
         this.user = user;
     }
 
-    public double getRate() {
-        return rate;
+    public Movie getMovie() {
+        return movie;
     }
 
-    public void setRate(double rate) {
-        this.rate = rate;
+    public void setMovie(Movie movie) {
+        this.movie = movie;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
     }
 }

@@ -18,7 +18,6 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_generator")
     @SequenceGenerator(name = "user_id_generator", sequenceName = "user_id_generator", allocationSize = 1)
@@ -51,6 +50,8 @@ public class User {
     private List<Comment> comments;
 
     public User() {
+        this.authorities = new ArrayList<>();
+        this.rates = new ArrayList<>();
         this.comments = new ArrayList<>();
     }
 

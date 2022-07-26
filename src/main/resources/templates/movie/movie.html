@@ -1,88 +1,93 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org" lang="java">
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title th:text="${movie.getMovieName()}+' ('+${movie.getYear()}+')'"></title>
+    <title th:text="${movie.getTitle()}+' ('+${movie.getYear()}+')'"/>
 </head>
-<body>
 
-<h1 th:text="${movie.getMovieName()}"></h1>
+<body>
+<!--movie-info-->
+<h1 th:text="${movie.getTitle()}+' ('+${movie.getYear()}+')'"/>
+
+<br>
+<div th:text="${movie.getDescription()}"/>
 
 <br><br>
+<div>Director: <span th:text="${movie.getDirector()}"/></div>
 
-<b>Описание : </b>
-<b th:text="${movie.getDescription()}"></b>
-<br>
-<b>Автор : </b>
-<b th:text="${movie.getAuthor()}"></b>
-<br>
-<b>Год выпуска : </b>
-<b th:text="${movie.getYear()}"></b>
-<br>
-<b>Рейтинг : </b>
-<b th:text="${movie.getRate()}"></b>
-<br>
-<b>Просмотров : </b>
-<b th:text="${movie.getViews()}"></b>
+<br><br>
+<div>
+    <span>Views: </span><span th:text="${movie.getViews()}"/>
+    <span>Rating: </span><span th:text="${movie.getRating()}"/>
+</div>
+<!---->
 
-<div th:if="${#httpServletRequest.remoteUser} != null">
-    <form th:if="${!movie.isRatedByUsername(#httpServletRequest.getRemoteUser())}" th:action="@{/movie/doRate}"
-          th:method="POST">
+<!--your-rate-input-->
+<br><br>
+<div th:if="${#httpServletRequest.getRemoteUser()} != null">
+    <form th:if="${rate.getId() == 0}" th:action="@{/movie/addRate}" th:method="POST">
         <input name="movieId" type="hidden" th:value="${movie.getId()}">
-        <input name="username" type="hidden" th:value="${#httpServletRequest.getRemoteUser()}">
-        <label><input name="rate" type="radio" th:value="1">1</label>
-        <label><input name="rate" type="radio" th:value="2">2</label>
-        <label><input name="rate" type="radio" th:value="3">3</label>
-        <label><input name="rate" type="radio" th:value="4">4</label>
-        <label><input name="rate" type="radio" th:value="5">5</label>
-        <label><input name="rate" type="radio" th:value="6">6</label>
-        <label><input name="rate" type="radio" th:value="7">7</label>
-        <label><input name="rate" type="radio" th:value="8">8</label>
-        <label><input name="rate" type="radio" th:value="9">9</label>
-        <label><input name="rate" type="radio" th:value="10">10</label>
+
+        <label><input name="ratePoints" type="radio" th:value="1">1</label>
+        <label><input name="ratePoints" type="radio" th:value="2">2</label>
+        <label><input name="ratePoints" type="radio" th:value="3">3</label>
+        <label><input name="ratePoints" type="radio" th:value="4">4</label>
+        <label><input name="ratePoints" type="radio" th:value="5">5</label>
+        <label><input name="ratePoints" type="radio" th:value="6">6</label>
+        <label><input name="ratePoints" type="radio" th:value="7">7</label>
+        <label><input name="ratePoints" type="radio" th:value="8">8</label>
+        <label><input name="ratePoints" type="radio" th:value="9">9</label>
+        <label><input name="ratePoints" type="radio" th:value="10">10</label>
+
         <input type="submit" th:value="Rate">
     </form>
 </div>
+<!---->
 
-<div th:if="${#httpServletRequest.remoteUser} != null">
-    <form th:if="${movie.isRatedByUsername(#httpServletRequest.getRemoteUser())}" th:action="@{/movie/undoRate}"
-          th:method="POST">
-        <input name="movieId" type="hidden" th:value="${movie.getId()}">
-        <input name="username" type="hidden" th:value="${#httpServletRequest.getRemoteUser()}">
-        <b>Ваша оценка - </b>
-        <b th:text="${movie.getRateByUsername(#httpServletRequest.getRemoteUser()).getRate()}"></b>
-        <input type="submit" th:value="Undo">
-    </form>
-</div>
-
+<!--your-rate-show-->
 <br><br>
-
 <div th:if="${#httpServletRequest.getRemoteUser()} != null">
-    <form th:action="@{/movie/comment}" th:method="POST">
+    <form th:if="${rate.getId() != 0}" th:action="@{/movie/deleteRate}" th:method="POST">
         <input name="movieId" type="hidden" th:value="${movie.getId()}">
-        <input name="username" type="hidden" th:value="${#httpServletRequest.getRemoteUser()}">
-        <label><input name="comment" type="text"></label>
-        <input type="submit" th:value="Submit">
+        <input name="rateId" type="hidden" th:value="${rate.getId()}">
+
+        <span>Your rate - </span><span th:text="${rate.getPoints()}"/>
+
+        <input type="submit" th:value="Unrate">
     </form>
 </div>
+<!---->
 
+<!--comment-write-->
 <br>
+<form th:if="${#httpServletRequest.getRemoteUser()} != null"
+      th:action="@{/movie/addComment}" th:method="POST">
+    <input name="movieId" type="hidden" th:value="${movie.getId()}">
 
-<table>
-    <tr th:each="comment : ${movie.getComments()}" th:if="${!movie.getComments().isEmpty()}">
-        <td><p th:text="${comment.getUser().getUsername()}"></p></td>
-        <td><p th:text="${comment.getBody()}"/></td>
-        <td><form th:if="${comment.isSubmittedByUsername(#httpServletRequest.getRemoteUser())}"
-                  th:action="@{/movie/uncomment}" th:method="POST">
-            <input name="movieId" type="hidden" th:value="${movie.getId()}">
-            <input name="username" type="hidden" th:value="${#httpServletRequest.getRemoteUser()}">
-            <input name="commentId" type="hidden" th:value="${comment.getId()}">
-            <input type="submit" th:value="delete">
-        </form></td>
-        <td><br><br></td>
-    </tr>
-</table>
+    <label><textarea name="commentContent" placeholder="Leave a comment" cols="20" rows="3"></textarea></label>
 
+    <br><input type="submit" th:value="Submit">
+</form>
+<!---->
+
+<!--comment-show-->
+<br>
+<th:block th:if="${!movie.getComments().isEmpty()}"
+          th:each="eachComment : ${movie.getComments()}">
+    <br><br>
+    <span th:text="'['+${eachComment.getUser().getUsername()}+']'"/>
+    <span th:text="${eachComment.getContent()}"/>
+    <form th:if="${eachComment.getUser().getUsername().equals(#httpServletRequest.getRemoteUser())}"
+          th:action="@{/movie/deleteComment}" th:method="POST"
+          style="display: inline-block">
+        <input name="movieId" type="hidden" th:value="${movie.getId()}">
+        <input name="commentId" type="hidden" th:value="${eachComment.getId()}">
+        <input type="submit" th:value="Delete">
+    </form>
+</th:block>
+<!---->
 </body>
+
 </html>

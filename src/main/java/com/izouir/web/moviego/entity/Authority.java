@@ -10,12 +10,12 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "authorities")
 public class Authority {
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "authority_id_generator")
     @SequenceGenerator(name = "authority_id_generator", sequenceName = "authority_id_generator", allocationSize = 1)
@@ -33,11 +33,12 @@ public class Authority {
     )
     private List<User> users;
 
-    public Authority() {}
+    public Authority() {
+    }
 
-    public Authority(String authority, List<User> users) {
+    public Authority(String authority) {
         this.authority = authority;
-        this.users = users;
+        this.users = new ArrayList<>();
     }
 
     public long getId() {

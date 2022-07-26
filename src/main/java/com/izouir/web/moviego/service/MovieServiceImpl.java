@@ -2,81 +2,70 @@ package com.izouir.web.moviego.service;
 
 import com.izouir.web.moviego.entity.Movie;
 import com.izouir.web.moviego.entity.Rate;
+import com.izouir.web.moviego.exception.MovieNotFoundException;
 import com.izouir.web.moviego.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MovieServiceImpl implements MovieService {
-
     private final MovieRepository MOVIE_REPOSITORY;
 
-    private Double calculateMovieRate(Long movieId) {
-        double movieRate = 0;
-        List<Rate> rates = MOVIE_REPOSITORY.findById(movieId).getRates();
-        if (!rates.isEmpty()) {
-            for (Rate forRate : rates) {
-                movieRate += forRate.getRate();
-            }
-            movieRate /= rates.size();
+    public MovieServiceImpl(@Autowired MovieRepository MOVIE_REPOSITORY) {
+        this.MOVIE_REPOSITORY = MOVIE_REPOSITORY;
+    }
+
+    @Override
+    @Transactional
+    public Movie findMovie(Long id) throws MovieNotFoundException {
+        Optional<Movie> foundMovie = MOVIE_REPOSITORY.findById(id);
+        if (foundMovie.isEmpty()) {
+            throw new MovieNotFoundException(String.format("Movie with id=%d was not found", id));
         }
-        return movieRate;
-    }
-
-    public MovieServiceImpl(@Autowired MovieRepository movieRepository) {
-        this.MOVIE_REPOSITORY = movieRepository;
+        return foundMovie.get();
     }
 
     @Override
     @Transactional
-    public Movie getMovie(Long movieId) {
-        return MOVIE_REPOSITORY.findById(movieId);
+    public List<Movie> findMovies(String searchContent) throws MovieNotFoundException {
+        Optional<List<Movie>> foundMovies = MOVIE_REPOSITORY.findByTitleLikeIgnoreCaseOrderByRatingDesc(searchContent);
+        if (foundMovies.isEmpty()) {
+            throw new MovieNotFoundException(String.format("No movies were found using searchContent=%s", searchContent));
+        }
+        return foundMovies.get();
     }
 
     @Override
     @Transactional
-    public void incrementViewsForMovie(Long movieId) {
-        MOVIE_REPOSITORY.incrementViewsForMovie(movieId);
+    public void updateMovieIncrementViews(Long id) {
+        MOVIE_REPOSITORY.updateByIdIncrementViews(id);
     }
 
     @Override
     @Transactional
-    public void decrementViewsForMovie(Long movieId) {
-        MOVIE_REPOSITORY.decrementViewsForMovie(movieId);
+    public void updateMovieDecrementViews(Long id) {
+        MOVIE_REPOSITORY.updateByIdDecrementViews(id);
     }
 
     @Override
     @Transactional
-    public List<Movie> getMoviesLike(String movieName) {
-        return MOVIE_REPOSITORY.findByMovieNameLikeIgnoreCaseOrderByRate(movieName);
-    }
-
-    @Override
-    @Transactional
-    public void doRateMovie(Long movieId, Long userId, Double rate) {
-        MOVIE_REPOSITORY.doRateMovie(movieId, userId, rate);
-        MOVIE_REPOSITORY.setMovieRate(movieId, calculateMovieRate(movieId));
-    }
-
-    @Override
-    @Transactional
-    public void undoRateMovie(Long movieId, Long userId) {
-        MOVIE_REPOSITORY.undoRateMovie(movieId, userId);
-        MOVIE_REPOSITORY.setMovieRate(movieId, calculateMovieRate(movieId));
-    }
-
-    @Override
-    @Transactional
-    public void updateMovieAddComment(Long movieId, Long userId, String comment) {
-        MOVIE_REPOSITORY.addMovieComment(movieId, userId, comment);
-    }
-
-    @Override
-    @Transactional
-    public void updateMovieDeleteComment(Long commentId) {
-        MOVIE_REPOSITORY.deleteMovieComment(commentId);
+    public void updateMovieUpdateRating(Long id) throws MovieNotFoundException {
+        Optional<Movie> foundMovie = MOVIE_REPOSITORY.findById(id);
+        if (foundMovie.isEmpty()) {
+            throw new MovieNotFoundException(String.format("Movie with id=%d was not found, rating can not be updated", id));
+        }
+        double rating = 0.0d;
+        List<Rate> rates = foundMovie.get().getRates();
+        if (!rates.isEmpty()) {
+            for (Rate rate : rates) {
+                rating += rate.getPoints();
+            }
+            rating /= rates.size();
+        }
+        MOVIE_REPOSITORY.updateByIdSetRating(id, rating);
     }
 }

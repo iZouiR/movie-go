@@ -15,18 +15,17 @@ import java.util.List;
 @Entity
 @Table(name = "movies")
 public class Movie {
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "movie_id_generator")
     @SequenceGenerator(name = "movie_id_generator", sequenceName = "movie_id_generator", allocationSize = 1)
     @Column(name = "id")
     private long id;
 
-    @Column(name = "movie_name")
-    private String movieName;
+    @Column(name = "title")
+    private String title;
 
-    @Column(name = "author")
-    private String author;
+    @Column(name = "director")
+    private String director;
 
     @Column(name = "description")
     private String description;
@@ -37,8 +36,8 @@ public class Movie {
     @Column(name = "views")
     private int views;
 
-    @Column(name = "rate")
-    private double rate;
+    @Column(name = "rating")
+    private double rating;
 
     @OneToMany
     @JoinColumn(name = "movie_id")
@@ -49,16 +48,17 @@ public class Movie {
     private List<Comment> comments;
 
     public Movie() {
+        this.rates = new ArrayList<>();
         this.comments = new ArrayList<>();
     }
 
-    public Movie(String movieName, String author, String description, int year, int views, double rate) {
-        this.movieName = movieName;
-        this.author = author;
+    public Movie(String title, String director, String description, int year, int views, double rating) {
+        this.title = title;
+        this.director = director;
         this.description = description;
         this.year = year;
         this.views = views;
-        this.rate = rate;
+        this.rating = rating;
         this.rates = new ArrayList<>();
         this.comments = new ArrayList<>();
     }
@@ -71,20 +71,20 @@ public class Movie {
         this.id = id;
     }
 
-    public String getMovieName() {
-        return movieName;
+    public String getTitle() {
+        return title;
     }
 
-    public void setMovieName(String movieName) {
-        this.movieName = movieName;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getDirector() {
+        return director;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setDirector(String director) {
+        this.director = director;
     }
 
     public String getDescription() {
@@ -111,12 +111,12 @@ public class Movie {
         this.views = views;
     }
 
-    public double getRate() {
-        return rate;
+    public double getRating() {
+        return rating;
     }
 
-    public void setRate(double rate) {
-        this.rate = rate;
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
     public List<Rate> getRates() {
@@ -133,27 +133,5 @@ public class Movie {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
-    }
-
-    public Rate getRateByUsername(String username) {
-        Rate returnRate = new Rate();
-        for (Rate forRate : getRates()) {
-            if (forRate.getUser().getUsername().equals(username)) {
-                returnRate = forRate;
-                break;
-            }
-        }
-        return returnRate;
-    }
-
-    public boolean isRatedByUsername(String username) {
-        boolean returnBoolean = false;
-        for (Rate forRate : getRates()) {
-            if (forRate.getUser().getUsername().equals(username)) {
-                returnBoolean = true;
-                break;
-            }
-        }
-        return returnBoolean;
     }
 }

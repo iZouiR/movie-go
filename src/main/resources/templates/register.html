@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org" lang="java">
+      xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Регистрация</title>
+    <meta charset="UTF-8">
+    <title>Registration</title>
 </head>
+
 <body>
-<div th:if="message != ''" th:text="${message}"></div>
-<form th:action="@{/register}" th:method="POST" th:object="${user}">
-  <label>Логин : <input type="text" name="username"/> </label>
-  <br>
-  <label>Пароль : <input type="password" name="password"/> </label>
-  <br>
-  <input type="submit" value="Register"/>
+<div th:if="${message != null}" th:text="${message}"></div>
+<form th:action="@{/register}" th:method="POST">
+    <label>username : <input name="username" type="text"/></label>
+    <br><label>password : <input name="password" type="password"/></label>
+    <br><input type="submit" value="Register"/>
 </form>
 </body>
+
 </html>

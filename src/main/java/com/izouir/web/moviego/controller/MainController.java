@@ -2,13 +2,12 @@ package com.izouir.web.moviego.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class MainController {
-
     @GetMapping("/")
-    public String openRootPage() {
-        return "redirect:/movie/";
+    public ModelAndView openRootPage() {
+        return new ModelAndView("redirect:/movie/");
     }
-
 }
