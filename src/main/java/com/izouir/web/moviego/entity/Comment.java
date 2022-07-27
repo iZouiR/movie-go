@@ -1,9 +1,9 @@
 package com.izouir.web.moviego.entity;
 
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,18 +24,18 @@ public class Comment {
     @Column(name = "content")
     private String content;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id")
     private Movie movie;
 
     public Comment() {
     }
 
-    public Comment(String content, User user, Movie movie) {
+    public Comment(final String content, final User user, final Movie movie) {
         this.content = content;
         this.user = user;
         this.movie = movie;
@@ -45,7 +45,7 @@ public class Comment {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(final long id) {
         this.id = id;
     }
 
@@ -53,7 +53,7 @@ public class Comment {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(final String content) {
         this.content = content;
     }
 
@@ -61,7 +61,7 @@ public class Comment {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(final User user) {
         this.user = user;
     }
 
@@ -69,7 +69,7 @@ public class Comment {
         return movie;
     }
 
-    public void setMovie(Movie movie) {
+    public void setMovie(final Movie movie) {
         this.movie = movie;
     }
 }

@@ -2,6 +2,7 @@ package com.izouir.web.moviego.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,8 +11,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.Set;
 
 @Entity
 @Table(name = "authorities")
@@ -25,27 +26,26 @@ public class Authority {
     @Column(name = "authority")
     private String authority;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "users_authorities",
             joinColumns = @JoinColumn(name = "authority_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private List<User> users;
+    private Set<User> users = Collections.emptySet();
 
     public Authority() {
     }
 
-    public Authority(String authority) {
+    public Authority(final String authority) {
         this.authority = authority;
-        this.users = new ArrayList<>();
     }
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(final long id) {
         this.id = id;
     }
 
@@ -53,15 +53,15 @@ public class Authority {
         return authority;
     }
 
-    public void setAuthority(String authority) {
+    public void setAuthority(final String authority) {
         this.authority = authority;
     }
 
-    public List<User> getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(final Set<User> users) {
         this.users = users;
     }
 }

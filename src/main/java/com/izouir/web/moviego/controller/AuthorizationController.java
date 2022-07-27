@@ -15,20 +15,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 @Controller
 public class AuthorizationController {
-    private final AuthorityService AUTHORITY_SERVICE;
-    private final UserService USER_SERVICE;
-    private final BCryptPasswordEncoder BCRYPT_PASSWORD_ENCODER;
+    private final AuthorityService authorityService;
+    private final UserService userService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public AuthorizationController(@Autowired AuthorityService AUTHORITY_SERVICE,
-                                   @Autowired UserService USER_SERVICE,
-                                   @Autowired BCryptPasswordEncoder BCRYPT_PASSWORD_ENCODER) {
-        this.AUTHORITY_SERVICE = AUTHORITY_SERVICE;
-        this.USER_SERVICE = USER_SERVICE;
-        this.BCRYPT_PASSWORD_ENCODER = BCRYPT_PASSWORD_ENCODER;
+    @Autowired
+    public AuthorizationController(final AuthorityService authorityService,
+                                   final UserService userService,
+                                   final BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.authorityService = authorityService;
+        this.userService = userService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @GetMapping("/login")
@@ -42,14 +43,14 @@ public class AuthorizationController {
     }
 
     @PostMapping("/register")
-    public ModelAndView registerNewUser(@ModelAttribute("username") String username,
+    public ModelAndView registerNewUser(@ModelAttribute("username") final String username,
                                         @ModelAttribute("password") String password) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/login");
+        final ModelAndView modelAndView = new ModelAndView("redirect:/login");
 
         User existingUser = null;
         try {
-            existingUser = USER_SERVICE.findUser(username);
-        } catch (UserNotFoundException ignored) {
+            existingUser = userService.findUser(username);
+        } catch (final UserNotFoundException ignored) {
         }
 
         if (existingUser != null) {
@@ -57,10 +58,10 @@ public class AuthorizationController {
             modelAndView.setViewName("register");
         } else {
             try {
-                List<Authority> authorities = Collections.singletonList(AUTHORITY_SERVICE.findAuthority("ROLE_USER"));
-                password = BCRYPT_PASSWORD_ENCODER.encode(password);
-                USER_SERVICE.saveUser(username, password, true, authorities);
-            } catch (AuthorityNotFoundException exception) {
+                final Set<Authority> authorities = Collections.singleton(authorityService.findAuthority("ROLE_USER"));
+                password = bCryptPasswordEncoder.encode(password);
+                userService.saveUser(username, password, true, authorities);
+            } catch (final AuthorityNotFoundException exception) {
                 exception.printStackTrace();
             }
         }

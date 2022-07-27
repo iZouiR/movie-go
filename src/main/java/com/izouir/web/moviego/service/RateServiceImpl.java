@@ -13,16 +13,16 @@ import java.util.Optional;
 
 @Service
 public class RateServiceImpl implements RateService {
-    private final RateRepository RATE_REPOSITORY;
+    private final RateRepository rateRepository;
 
-    public RateServiceImpl(@Autowired RateRepository RATE_REPOSITORY) {
-        this.RATE_REPOSITORY = RATE_REPOSITORY;
+    @Autowired
+    public RateServiceImpl(final RateRepository rateRepository) {
+        this.rateRepository = rateRepository;
     }
 
     @Override
-    @Transactional
-    public Rate findRate(Long movieId, Long userId) throws RateNotFoundException {
-        Optional<Rate> foundRate = RATE_REPOSITORY.findByUserIdAndMovieId(userId, movieId);
+    public Rate findRate(final Long movieId, final Long userId) throws RateNotFoundException {
+        final Optional<Rate> foundRate = rateRepository.findByUserIdAndMovieId(userId, movieId);
         if (foundRate.isEmpty()) {
             throw new RateNotFoundException(String.format("Rate with movieId=%d and userId=%d was not found", movieId, userId));
         }
@@ -31,17 +31,17 @@ public class RateServiceImpl implements RateService {
 
     @Override
     @Transactional
-    public void addRate(User user, Movie movie, Integer points) {
-        Rate rate = new Rate();
+    public void addRate(final User user, final Movie movie, final Integer points) {
+        final Rate rate = new Rate();
         rate.setUser(user);
         rate.setMovie(movie);
         rate.setPoints(points);
-        RATE_REPOSITORY.save(rate);
+        rateRepository.save(rate);
     }
 
     @Override
     @Transactional
-    public void deleteRate(Long id) {
-        RATE_REPOSITORY.deleteById(id);
+    public void deleteRate(final Long id) {
+        rateRepository.deleteById(id);
     }
 }

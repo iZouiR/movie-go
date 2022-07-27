@@ -8,21 +8,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private final UserRepository USER_REPOSITORY;
+    private final UserRepository userRepository;
 
-    public UserServiceImpl(@Autowired UserRepository USER_REPOSITORY) {
-        this.USER_REPOSITORY = USER_REPOSITORY;
+    @Autowired
+    public UserServiceImpl(final UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
-    @Transactional
-    public User findUser(String username) throws UserNotFoundException {
-        Optional<User> foundUser = USER_REPOSITORY.findByUsernameIgnoreCase(username);
+    public User findUser(final String username) throws UserNotFoundException {
+        final Optional<User> foundUser = userRepository.findByUsernameIgnoreCase(username);
         if (foundUser.isEmpty()) {
             throw new UserNotFoundException(String.format("User with username=%s was not found", username));
         }
@@ -31,12 +31,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void saveUser(String username, String password, Boolean enabled, List<Authority> authorities) {
-        User user = new User();
+    public void saveUser(final String username, final String password, final Boolean enabled, final Set<Authority> authorities) {
+        final User user = new User();
         user.setUsername(username);
         user.setPassword(password);
         user.setEnabled(enabled);
         user.setAuthorities(authorities);
-        USER_REPOSITORY.save(user);
+        userRepository.save(user);
     }
 }

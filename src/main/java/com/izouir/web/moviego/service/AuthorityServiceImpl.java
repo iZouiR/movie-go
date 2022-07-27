@@ -5,22 +5,21 @@ import com.izouir.web.moviego.exception.AuthorityNotFoundException;
 import com.izouir.web.moviego.repository.AuthorityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
 public class AuthorityServiceImpl implements AuthorityService {
-    private final AuthorityRepository AUTHORITY_REPOSITORY;
+    private final AuthorityRepository authorityRepository;
 
-    public AuthorityServiceImpl(@Autowired AuthorityRepository AUTHORITY_REPOSITORY) {
-        this.AUTHORITY_REPOSITORY = AUTHORITY_REPOSITORY;
+    @Autowired
+    public AuthorityServiceImpl(final AuthorityRepository authorityRepository) {
+        this.authorityRepository = authorityRepository;
     }
 
     @Override
-    @Transactional
-    public Authority findAuthority(String authority) throws AuthorityNotFoundException {
-        Optional<Authority> foundAuthority = AUTHORITY_REPOSITORY.findByAuthorityIgnoreCase(authority);
+    public Authority findAuthority(final String authority) throws AuthorityNotFoundException {
+        final Optional<Authority> foundAuthority = authorityRepository.findByAuthorityIgnoreCase(authority);
         if (foundAuthority.isEmpty()) {
             throw new AuthorityNotFoundException(String.format("Authority with name=%s was not found", authority));
         }

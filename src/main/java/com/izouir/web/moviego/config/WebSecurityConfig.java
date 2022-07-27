@@ -14,10 +14,11 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private final DataSource DATA_SOURCE;
+    private final DataSource dataSource;
 
-    public WebSecurityConfig(@Autowired DataSource dataSource) {
-        this.DATA_SOURCE = dataSource;
+    @Autowired
+    public WebSecurityConfig(final DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     @Bean
@@ -26,7 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    protected void configure(final HttpSecurity http) throws Exception {
         http
                     .authorizeRequests()
                     .antMatchers("/", "/login", "/register", "/movie/**")
@@ -44,9 +45,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
-                .dataSource(DATA_SOURCE)
+                .dataSource(dataSource)
                 .passwordEncoder(bCryptPasswordEncoder())
                 .usersByUsernameQuery("SELECT username, password, enabled FROM users WHERE username = ?")
                 .authoritiesByUsernameQuery(

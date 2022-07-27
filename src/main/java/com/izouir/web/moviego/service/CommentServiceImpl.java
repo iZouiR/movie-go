@@ -10,25 +10,26 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CommentServiceImpl implements CommentService {
-    private final CommentRepository COMMENT_REPOSITORY;
+    private final CommentRepository commentRepository;
 
-    public CommentServiceImpl(@Autowired CommentRepository COMMENT_REPOSITORY) {
-        this.COMMENT_REPOSITORY = COMMENT_REPOSITORY;
+    @Autowired
+    public CommentServiceImpl(final CommentRepository commentRepository) {
+        this.commentRepository = commentRepository;
     }
 
     @Override
     @Transactional
-    public void addComment(String content, User user, Movie movie) {
-        Comment comment = new Comment();
+    public void addComment(final String content, final User user, final Movie movie) {
+        final Comment comment = new Comment();
         comment.setContent(content);
         comment.setUser(user);
         comment.setMovie(movie);
-        COMMENT_REPOSITORY.save(comment);
+        commentRepository.save(comment);
     }
 
     @Override
     @Transactional
-    public void deleteComment(Long id) {
-        COMMENT_REPOSITORY.deleteById(id);
+    public void deleteComment(final Long id) {
+        commentRepository.deleteById(id);
     }
 }

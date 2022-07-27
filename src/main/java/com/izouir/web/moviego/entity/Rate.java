@@ -2,6 +2,7 @@ package com.izouir.web.moviego.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,11 +20,11 @@ public class Rate {
     @Column(name = "id")
     private long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id")
     private Movie movie;
 
@@ -33,7 +34,7 @@ public class Rate {
     public Rate() {
     }
 
-    public Rate(User user, Movie movie, int points) {
+    public Rate(final User user, final Movie movie, final int points) {
         this.user = user;
         this.movie = movie;
         this.points = points;
@@ -43,7 +44,7 @@ public class Rate {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(final long id) {
         this.id = id;
     }
 
@@ -51,7 +52,7 @@ public class Rate {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(final User user) {
         this.user = user;
     }
 
@@ -59,7 +60,7 @@ public class Rate {
         return movie;
     }
 
-    public void setMovie(Movie movie) {
+    public void setMovie(final Movie movie) {
         this.movie = movie;
     }
 
@@ -67,7 +68,7 @@ public class Rate {
         return points;
     }
 
-    public void setPoints(int points) {
+    public void setPoints(final int points) {
         this.points = points;
     }
 }

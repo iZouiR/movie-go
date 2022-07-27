@@ -10,19 +10,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class MovieServiceImpl implements MovieService {
-    private final MovieRepository MOVIE_REPOSITORY;
+    private final MovieRepository movieRepository;
 
-    public MovieServiceImpl(@Autowired MovieRepository MOVIE_REPOSITORY) {
-        this.MOVIE_REPOSITORY = MOVIE_REPOSITORY;
+    @Autowired
+    public MovieServiceImpl(final MovieRepository movieRepository) {
+        this.movieRepository = movieRepository;
     }
 
     @Override
-    @Transactional
-    public Movie findMovie(Long id) throws MovieNotFoundException {
-        Optional<Movie> foundMovie = MOVIE_REPOSITORY.findById(id);
+    public Movie findMovie(final Long id) throws MovieNotFoundException {
+        final Optional<Movie> foundMovie = movieRepository.findById(id);
         if (foundMovie.isEmpty()) {
             throw new MovieNotFoundException(String.format("Movie with id=%d was not found", id));
         }
@@ -30,9 +31,8 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    @Transactional
-    public List<Movie> findMovies(String searchContent) throws MovieNotFoundException {
-        Optional<List<Movie>> foundMovies = MOVIE_REPOSITORY.findByTitleContainingIgnoreCaseOrderByRatingDesc(searchContent);
+    public List<Movie> findMovies(final String searchContent) throws MovieNotFoundException {
+        final Optional<List<Movie>> foundMovies = movieRepository.findByTitleContainingIgnoreCaseOrderByRatingDesc(searchContent);
         if (foundMovies.isEmpty()) {
             throw new MovieNotFoundException(String.format("No movies were found using searchContent=%s", searchContent));
         }
@@ -41,31 +41,31 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     @Transactional
-    public void updateMovieIncrementViews(Long id) {
-        MOVIE_REPOSITORY.updateByIdIncrementViews(id);
+    public void updateMovieIncrementViews(final Long id) {
+        movieRepository.updateByIdIncrementViews(id);
     }
 
     @Override
     @Transactional
-    public void updateMovieDecrementViews(Long id) {
-        MOVIE_REPOSITORY.updateByIdDecrementViews(id);
+    public void updateMovieDecrementViews(final Long id) {
+        movieRepository.updateByIdDecrementViews(id);
     }
 
     @Override
     @Transactional
-    public void updateMovieUpdateRating(Long id) throws MovieNotFoundException {
-        Optional<Movie> foundMovie = MOVIE_REPOSITORY.findById(id);
+    public void updateMovieUpdateRating(final Long id) throws MovieNotFoundException {
+        final Optional<Movie> foundMovie = movieRepository.findById(id);
         if (foundMovie.isEmpty()) {
             throw new MovieNotFoundException(String.format("Movie with id=%d was not found, rating can not be updated", id));
         }
         double rating = 0.0d;
-        List<Rate> rates = foundMovie.get().getRates();
+        final Set<Rate> rates = foundMovie.get().getRates();
         if (!rates.isEmpty()) {
-            for (Rate rate : rates) {
+            for (final Rate rate : rates) {
                 rating += rate.getPoints();
             }
             rating /= rates.size();
         }
-        MOVIE_REPOSITORY.updateByIdSetRating(id, rating);
+        movieRepository.updateByIdSetRating(id, rating);
     }
 }

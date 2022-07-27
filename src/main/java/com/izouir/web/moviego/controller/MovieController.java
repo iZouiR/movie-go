@@ -21,114 +21,115 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
 @RequestMapping("/movie")
 public class MovieController {
-    private final CommentService COMMENT_SERVICE;
-    private final MovieService MOVIE_SERVICE;
-    private final RateService RATE_SERVICE;
-    private final UserService USER_SERVICE;
+    private final CommentService commentService;
+    private final MovieService movieService;
+    private final RateService rateService;
+    private final UserService userService;
 
-    public MovieController(@Autowired CommentService COMMENT_SERVICE,
-                           @Autowired MovieService MOVIE_SERVICE,
-                           @Autowired RateService RATE_SERVICE,
-                           @Autowired UserService USER_SERVICE) {
-        this.COMMENT_SERVICE = COMMENT_SERVICE;
-        this.MOVIE_SERVICE = MOVIE_SERVICE;
-        this.RATE_SERVICE = RATE_SERVICE;
-        this.USER_SERVICE = USER_SERVICE;
+    @Autowired
+    public MovieController(final CommentService commentService,
+                           final MovieService movieService,
+                           final RateService rateService,
+                           final UserService userService) {
+        this.commentService = commentService;
+        this.movieService = movieService;
+        this.rateService = rateService;
+        this.userService = userService;
     }
 
     @GetMapping("/")
-    public ModelAndView openMovieIndexPage(@RequestParam(name = "searchContent", defaultValue = "") String searchContent) {
-        ModelAndView modelAndView = new ModelAndView("movie/index");
-        List<Movie> foundMovies = new ArrayList<>();
+    public ModelAndView openMovieIndexPage(@RequestParam(name = "searchContent", defaultValue = "") final String searchContent) {
+        final ModelAndView modelAndView = new ModelAndView("movie/index");
+        List<Movie> foundMovies = Collections.emptyList();
         try {
-            foundMovies = MOVIE_SERVICE.findMovies(searchContent);
-        } catch (MovieNotFoundException ignored) {
+            foundMovies = movieService.findMovies(searchContent);
+        } catch (final MovieNotFoundException ignored) {
         }
         modelAndView.addObject("foundMovies", foundMovies);
         return modelAndView;
     }
 
     @GetMapping("/{movieId}")
-    public ModelAndView openMoviePage(@PathVariable("movieId") Long movieId,
-                                      HttpServletRequest httpServletRequest) {
-        ModelAndView modelAndView = new ModelAndView("movie/movie");
+    public ModelAndView openMoviePage(@PathVariable("movieId") final Long movieId,
+                                      final HttpServletRequest httpServletRequest) {
+        final ModelAndView modelAndView = new ModelAndView("movie/movie");
         try {
-            MOVIE_SERVICE.updateMovieIncrementViews(movieId);
-            Movie movie = MOVIE_SERVICE.findMovie(movieId);
+            movieService.updateMovieIncrementViews(movieId);
+            final Movie movie = movieService.findMovie(movieId);
             modelAndView.addObject("movie", movie);
 
             Rate rate = new Rate();
             try {
-                User user = USER_SERVICE.findUser(httpServletRequest.getRemoteUser());
-                rate = RATE_SERVICE.findRate(movieId, user.getId());
-            } catch (RateNotFoundException | UserNotFoundException ignored) {
+                final User user = userService.findUser(httpServletRequest.getRemoteUser());
+                rate = rateService.findRate(movieId, user.getId());
+            } catch (final RateNotFoundException | UserNotFoundException ignored) {
             }
             modelAndView.addObject("rate", rate);
-        } catch (MovieNotFoundException exception) {
+        } catch (final MovieNotFoundException exception) {
             exception.printStackTrace();
         }
         return modelAndView;
     }
 
     @PostMapping("/addRate")
-    public ModelAndView addRate(@RequestParam("movieId") Long movieId,
-                                @ModelAttribute("ratePoints") Integer ratePoints,
-                                HttpServletRequest httpServletRequest) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/movie/" + movieId);
+    public ModelAndView addRate(@RequestParam("movieId") final Long movieId,
+                                @ModelAttribute("ratePoints") final Integer ratePoints,
+                                final HttpServletRequest httpServletRequest) {
+        final ModelAndView modelAndView = new ModelAndView("redirect:/movie/" + movieId);
         try {
-            User user = USER_SERVICE.findUser(httpServletRequest.getRemoteUser());
-            Movie movie = MOVIE_SERVICE.findMovie(movieId);
-            RATE_SERVICE.addRate(user, movie, ratePoints);
-            MOVIE_SERVICE.updateMovieUpdateRating(movieId);
-            MOVIE_SERVICE.updateMovieDecrementViews(movieId);
-        } catch (UserNotFoundException | MovieNotFoundException exception) {
+            final User user = userService.findUser(httpServletRequest.getRemoteUser());
+            final Movie movie = movieService.findMovie(movieId);
+            rateService.addRate(user, movie, ratePoints);
+            movieService.updateMovieUpdateRating(movieId);
+            movieService.updateMovieDecrementViews(movieId);
+        } catch (final UserNotFoundException | MovieNotFoundException exception) {
             exception.printStackTrace();
         }
         return modelAndView;
     }
 
     @PostMapping("/deleteRate")
-    public ModelAndView deleteRate(@ModelAttribute("movieId") Long movieId,
-                                   @ModelAttribute("rateId") Long rateId) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/movie/" + movieId);
+    public ModelAndView deleteRate(@ModelAttribute("movieId") final Long movieId,
+                                   @ModelAttribute("rateId") final Long rateId) {
+        final ModelAndView modelAndView = new ModelAndView("redirect:/movie/" + movieId);
         try {
-            RATE_SERVICE.deleteRate(rateId);
-            MOVIE_SERVICE.updateMovieUpdateRating(movieId);
-            MOVIE_SERVICE.updateMovieDecrementViews(movieId);
-        } catch (MovieNotFoundException exception) {
+            rateService.deleteRate(rateId);
+            movieService.updateMovieUpdateRating(movieId);
+            movieService.updateMovieDecrementViews(movieId);
+        } catch (final MovieNotFoundException exception) {
             exception.printStackTrace();
         }
         return modelAndView;
     }
 
     @PostMapping("/addComment")
-    public ModelAndView addComment(@ModelAttribute("movieId") Long movieId,
-                                   @ModelAttribute("commentContent") String commentContent,
-                                   HttpServletRequest httpServletRequest) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/movie/" + movieId);
+    public ModelAndView addComment(@ModelAttribute("movieId") final Long movieId,
+                                   @ModelAttribute("commentContent") final String commentContent,
+                                   final HttpServletRequest httpServletRequest) {
+        final ModelAndView modelAndView = new ModelAndView("redirect:/movie/" + movieId);
         try {
-            User user = USER_SERVICE.findUser(httpServletRequest.getRemoteUser());
-            Movie movie = MOVIE_SERVICE.findMovie(movieId);
-            COMMENT_SERVICE.addComment(commentContent, user, movie);
-            MOVIE_SERVICE.updateMovieDecrementViews(movieId);
-        } catch (UserNotFoundException | MovieNotFoundException exception) {
+            final User user = userService.findUser(httpServletRequest.getRemoteUser());
+            final Movie movie = movieService.findMovie(movieId);
+            commentService.addComment(commentContent, user, movie);
+            movieService.updateMovieDecrementViews(movieId);
+        } catch (final UserNotFoundException | MovieNotFoundException exception) {
             exception.printStackTrace();
         }
         return modelAndView;
     }
 
     @PostMapping("/deleteComment")
-    public ModelAndView deleteComment(@ModelAttribute("movieId") Long movieId,
-                                      @ModelAttribute("commentId") Long commentId) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/movie/" + movieId);
-        COMMENT_SERVICE.deleteComment(commentId);
-        MOVIE_SERVICE.updateMovieDecrementViews(movieId);
+    public ModelAndView deleteComment(@ModelAttribute("movieId") final Long movieId,
+                                      @ModelAttribute("commentId") final Long commentId) {
+        final ModelAndView modelAndView = new ModelAndView("redirect:/movie/" + movieId);
+        commentService.deleteComment(commentId);
+        movieService.updateMovieDecrementViews(movieId);
         return modelAndView;
     }
 }

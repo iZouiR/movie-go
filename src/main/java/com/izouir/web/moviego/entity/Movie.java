@@ -2,6 +2,7 @@ package com.izouir.web.moviego.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -9,8 +10,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "movies")
@@ -39,35 +41,30 @@ public class Movie {
     @Column(name = "rating")
     private double rating;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id")
-    private List<Rate> rates;
+    private Set<Rate> rates = Collections.emptySet();
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "movie_id")
-    private List<Comment> comments;
+    private List<Comment> comments = Collections.emptyList();
 
-    public Movie() {
-        this.rates = new ArrayList<>();
-        this.comments = new ArrayList<>();
-    }
+    public Movie() {}
 
-    public Movie(String title, String director, String description, int year, int views, double rating) {
+    public Movie(final String title, final String director, final String description, final int year, final int views, final double rating) {
         this.title = title;
         this.director = director;
         this.description = description;
         this.year = year;
         this.views = views;
         this.rating = rating;
-        this.rates = new ArrayList<>();
-        this.comments = new ArrayList<>();
     }
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(final long id) {
         this.id = id;
     }
 
@@ -75,7 +72,7 @@ public class Movie {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -83,7 +80,7 @@ public class Movie {
         return director;
     }
 
-    public void setDirector(String director) {
+    public void setDirector(final String director) {
         this.director = director;
     }
 
@@ -91,7 +88,7 @@ public class Movie {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -99,7 +96,7 @@ public class Movie {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear(final int year) {
         this.year = year;
     }
 
@@ -107,7 +104,7 @@ public class Movie {
         return views;
     }
 
-    public void setViews(int views) {
+    public void setViews(final int views) {
         this.views = views;
     }
 
@@ -115,15 +112,15 @@ public class Movie {
         return rating;
     }
 
-    public void setRating(double rating) {
+    public void setRating(final double rating) {
         this.rating = rating;
     }
 
-    public List<Rate> getRates() {
+    public Set<Rate> getRates() {
         return rates;
     }
 
-    public void setRates(List<Rate> rates) {
+    public void setRates(final Set<Rate> rates) {
         this.rates = rates;
     }
 
@@ -131,7 +128,7 @@ public class Movie {
         return comments;
     }
 
-    public void setComments(List<Comment> comments) {
+    public void setComments(final List<Comment> comments) {
         this.comments = comments;
     }
 }
