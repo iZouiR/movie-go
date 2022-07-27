@@ -32,7 +32,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     @Transactional
     public List<Movie> findMovies(String searchContent) throws MovieNotFoundException {
-        Optional<List<Movie>> foundMovies = MOVIE_REPOSITORY.findByTitleLikeIgnoreCaseOrderByRatingDesc(searchContent);
+        Optional<List<Movie>> foundMovies = MOVIE_REPOSITORY.findByTitleContainingIgnoreCaseOrderByRatingDesc(searchContent);
         if (foundMovies.isEmpty()) {
             throw new MovieNotFoundException(String.format("No movies were found using searchContent=%s", searchContent));
         }
