@@ -1,0 +1,32 @@
+31-07-2022 [background-preinit] INFO  o.h.v.i.u.Version                                            - HV000001: Hibernate Validator 6.2.3.Final
+}31-07-2022 [main] INFO  c.i.w.m.MovieGoApplication                                   - Starting MovieGoApplication using Java 18.0.1.1 on DESKTOP-OQ70T31 with PID 2528 (D:\JavaProjects\MovieGo\target\classes started by Tima in D:\JavaProjects\MovieGo)
+}31-07-2022 [main] INFO  c.i.w.m.MovieGoApplication                                   - No active profile set, falling back to 1 default profile: "default"
+}31-07-2022 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate                    - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+}31-07-2022 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate                    - Finished Spring Data repository scanning in 110 ms. Found 5 JPA repository interfaces.
+}31-07-2022 [main] INFO  o.s.b.w.e.t.TomcatWebServer                                  - Tomcat initialized with port(s): 8080 (http)
+}31-07-2022 [main] INFO  o.a.c.h.Http11NioProtocol                                    - Initializing ProtocolHandler ["http-nio-8080"]
+}31-07-2022 [main] INFO  o.a.c.c.StandardService                                      - Starting service [Tomcat]
+}31-07-2022 [main] INFO  o.a.c.c.StandardEngine                                       - Starting Servlet engine: [Apache Tomcat/9.0.65]
+}31-07-2022 [main] INFO  o.a.c.c.C.[.[.[/]                                            - Initializing Spring embedded WebApplicationContext
+}31-07-2022 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext               - Root WebApplicationContext: initialization completed in 2520 ms
+}31-07-2022 [main] INFO  c.z.h.HikariDataSource                                       - HikariPool-1 - Starting...
+}31-07-2022 [main] WARN  c.z.h.u.DriverDataSource                                     - Registered driver with driverClassName=oracle.jdbc.driver.OracleDriver was not found, trying direct instantiation.
+}31-07-2022 [main] INFO  c.z.h.HikariDataSource                                       - HikariPool-1 - Start completed.
+}31-07-2022 [main] INFO  o.h.j.i.u.LogHelper                                          - HHH000204: Processing PersistenceUnitInfo [name: default]
+}31-07-2022 [main] INFO  o.h.Version                                                  - HHH000412: Hibernate ORM core version 5.6.10.Final
+}31-07-2022 [main] INFO  o.h.a.c.Version                                              - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+}31-07-2022 [main] INFO  o.h.d.Dialect                                                - HHH000400: Using dialect: org.hibernate.dialect.Oracle12cDialect
+}31-07-2022 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator                           - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+}31-07-2022 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean               - Initialized JPA EntityManagerFactory for persistence unit 'default'
+}31-07-2022 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration         - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+}31-07-2022 [main] INFO  o.s.s.w.DefaultSecurityFilterChain                           - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@34a99d8, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3e984100, org.springframework.security.web.context.SecurityContextPersistenceFilter@6c92a59d, org.springframework.security.web.header.HeaderWriterFilter@344769b9, org.springframework.security.web.csrf.CsrfFilter@e2696e8, org.springframework.security.web.authentication.logout.LogoutFilter@103033fe, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@73633230, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@49bc1f6c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@e638553, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@13e6c544, org.springframework.security.web.session.SessionManagementFilter@9c40f43, org.springframework.security.web.access.ExceptionTranslationFilter@a36ff0b, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1372696b]
+}31-07-2022 [main] INFO  o.a.c.h.Http11NioProtocol                                    - Starting ProtocolHandler ["http-nio-8080"]
+}31-07-2022 [main] INFO  o.s.b.w.e.t.TomcatWebServer                                  - Tomcat started on port(s): 8080 (http) with context path ''
+}31-07-2022 [main] INFO  c.i.w.m.MovieGoApplication                                   - Started MovieGoApplication in 8.481 seconds (JVM running for 10.348)
+}31-07-2022 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[.[.[/]                                            - Initializing Spring DispatcherServlet 'dispatcherServlet'
+}31-07-2022 [http-nio-8080-exec-1] INFO  o.s.w.s.DispatcherServlet                                    - Initializing Servlet 'dispatcherServlet'
+}31-07-2022 [http-nio-8080-exec-1] INFO  o.s.w.s.DispatcherServlet                                    - Completed initialization in 1 ms
+}01-08-2022 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean               - Closing JPA EntityManagerFactory for persistence unit 'default'
+}01-08-2022 [SpringApplicationShutdownHook] INFO  c.z.h.HikariDataSource                                       - HikariPool-1 - Shutdown initiated...
+}01-08-2022 [SpringApplicationShutdownHook] INFO  c.z.h.HikariDataSource                                       - HikariPool-1 - Shutdown completed.
+}

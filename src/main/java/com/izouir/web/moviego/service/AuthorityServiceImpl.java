@@ -16,8 +16,8 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
-    public Authority findAuthority(final String authority) throws AuthorityNotFoundException {
-        return authorityRepository.findByAuthorityIgnoreCase(authority).orElseThrow(
-                () -> new AuthorityNotFoundException("Authority with name=" + authority + " was not found"));
+    public Authority findAuthority(final String authority) {
+        return authorityRepository.findByAuthorityIgnoreCase(authority)
+                .orElseThrow(() -> new AuthorityNotFoundException("Authority with name=" + authority + " was not found"));
     }
 }

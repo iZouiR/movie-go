@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -21,15 +22,15 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Movie findMovie(final Long id) throws MovieNotFoundException {
-        return movieRepository.findById(id).orElseThrow(
-                () -> new MovieNotFoundException(String.format("Movie with id=%d was not found", id)));
+    public Movie findMovie(final Long id) {
+        return movieRepository.findById(id)
+                .orElseThrow(() -> new MovieNotFoundException("Movie with id=" + id + " was not found"));
     }
 
     @Override
-    public List<Movie> findMovies(final String searchContent) throws MovieNotFoundException {
-        return movieRepository.findByTitleContainingIgnoreCaseOrderByRatingDesc(searchContent).orElseThrow(
-                () -> new MovieNotFoundException(String.format("No movies were found using searchContent=%s", searchContent)));
+    public List<Movie> findMovies(final String searchContent) {
+        return movieRepository.findByTitleContainingIgnoreCaseOrderByRatingDesc(searchContent)
+                .orElse(Collections.emptyList());
     }
 
     @Override
@@ -46,9 +47,9 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     @Transactional
-    public void updateMovieUpdateRating(final Long id) throws MovieNotFoundException {
-        final Movie foundMovie = movieRepository.findById(id).orElseThrow(
-                () -> new MovieNotFoundException("Movie with id=" + id + " was not found, rating can not be updated"));
+    public void updateMovieUpdateRating(final Long id) {
+        final Movie foundMovie = movieRepository.findById(id)
+                .orElseThrow(() -> new MovieNotFoundException("Movie with id=" + id + " was not found, rating can not be updated"));
         double rating = 0.0d;
         final Set<Rate> rates = foundMovie.getRates();
         if (!rates.isEmpty()) {

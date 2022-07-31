@@ -19,9 +19,9 @@ public class RateServiceImpl implements RateService {
     }
 
     @Override
-    public Rate findRate(final Long movieId, final Long userId) throws RateNotFoundException {
-        return rateRepository.findByUserIdAndMovieId(userId, movieId).orElseThrow(
-                () -> new RateNotFoundException("Rate with movieId=" + movieId + " and userId=" + userId + " was not found"));
+    public Rate findRate(final Long movieId, final Long userId) {
+        return rateRepository.findByUserIdAndMovieId(userId, movieId)
+                .orElseThrow(() -> new RateNotFoundException("Rate with movieId=" + movieId + " and userId=" + userId + " was not found"));
     }
 
     @Override
