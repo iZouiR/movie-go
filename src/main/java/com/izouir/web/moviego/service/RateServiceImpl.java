@@ -3,7 +3,6 @@ package com.izouir.web.moviego.service;
 import com.izouir.web.moviego.entity.Movie;
 import com.izouir.web.moviego.entity.Rate;
 import com.izouir.web.moviego.entity.User;
-import com.izouir.web.moviego.exception.RateNotFoundException;
 import com.izouir.web.moviego.repository.RateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,9 +18,9 @@ public class RateServiceImpl implements RateService {
     }
 
     @Override
-    public Rate findRate(final Long movieId, final Long userId) {
+    public Rate findRateIfExists(final Long movieId, final Long userId) {
         return rateRepository.findByUserIdAndMovieId(userId, movieId)
-                .orElseThrow(() -> new RateNotFoundException("Rate with movieId=" + movieId + " and userId=" + userId + " was not found"));
+                .orElse(new Rate());
     }
 
     @Override

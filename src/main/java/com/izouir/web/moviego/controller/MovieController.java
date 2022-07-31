@@ -3,9 +3,6 @@ package com.izouir.web.moviego.controller;
 import com.izouir.web.moviego.entity.Movie;
 import com.izouir.web.moviego.entity.Rate;
 import com.izouir.web.moviego.entity.User;
-import com.izouir.web.moviego.exception.MovieNotFoundException;
-import com.izouir.web.moviego.exception.RateNotFoundException;
-import com.izouir.web.moviego.exception.UserNotFoundException;
 import com.izouir.web.moviego.service.CommentService;
 import com.izouir.web.moviego.service.MovieService;
 import com.izouir.web.moviego.service.RateService;
@@ -21,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -46,11 +42,7 @@ public class MovieController {
     @GetMapping("/")
     public ModelAndView openMovieIndexPage(@RequestParam(name = "searchContent", defaultValue = "") final String searchContent) {
         final ModelAndView modelAndView = new ModelAndView("movie/index");
-        List<Movie> foundMovies = Collections.emptyList();
-        try {
-            foundMovies = movieService.findMovies(searchContent);
-        } catch (final MovieNotFoundException ignored) {
-        }
+        final List<Movie> foundMovies = movieService.findMovies(searchContent);
         modelAndView.addObject("foundMovies", foundMovies);
         return modelAndView;
     }
@@ -59,21 +51,12 @@ public class MovieController {
     public ModelAndView openMoviePage(@PathVariable("movieId") final Long movieId,
                                       final HttpServletRequest httpServletRequest) {
         final ModelAndView modelAndView = new ModelAndView("movie/movie");
-        try {
-            movieService.updateMovieIncrementViews(movieId);
-            final Movie movie = movieService.findMovie(movieId);
-            modelAndView.addObject("movie", movie);
-
-            Rate rate = new Rate();
-            try {
-                final User user = userService.findUser(httpServletRequest.getRemoteUser());
-                rate = rateService.findRate(movieId, user.getId());
-            } catch (final RateNotFoundException | UserNotFoundException ignored) {
-            }
-            modelAndView.addObject("rate", rate);
-        } catch (final MovieNotFoundException exception) {
-            exception.printStackTrace();
-        }
+        final Movie movie = movieService.findMovie(movieId);
+        final User user = userService.findUser(httpServletRequest.getRemoteUser());
+        final Rate rate = rateService.findRateIfExists(movieId, user.getId());
+        movieService.updateMovieIncrementViews(movieId);
+        modelAndView.addObject("movie", movie);
+        modelAndView.addObject("rate", rate);
         return modelAndView;
     }
 
@@ -82,15 +65,11 @@ public class MovieController {
                                 @ModelAttribute("ratePoints") final Integer ratePoints,
                                 final HttpServletRequest httpServletRequest) {
         final ModelAndView modelAndView = new ModelAndView("redirect:/movie/" + movieId);
-        try {
-            final User user = userService.findUser(httpServletRequest.getRemoteUser());
-            final Movie movie = movieService.findMovie(movieId);
-            rateService.addRate(user, movie, ratePoints);
-            movieService.updateMovieUpdateRating(movieId);
-            movieService.updateMovieDecrementViews(movieId);
-        } catch (final UserNotFoundException | MovieNotFoundException exception) {
-            exception.printStackTrace();
-        }
+        final Movie movie = movieService.findMovie(movieId);
+        final User user = userService.findUser(httpServletRequest.getRemoteUser());
+        rateService.addRate(user, movie, ratePoints);
+        movieService.updateMovieUpdateRating(movieId);
+        movieService.updateMovieDecrementViews(movieId);
         return modelAndView;
     }
 
@@ -98,13 +77,9 @@ public class MovieController {
     public ModelAndView deleteRate(@ModelAttribute("movieId") final Long movieId,
                                    @ModelAttribute("rateId") final Long rateId) {
         final ModelAndView modelAndView = new ModelAndView("redirect:/movie/" + movieId);
-        try {
-            rateService.deleteRate(rateId);
-            movieService.updateMovieUpdateRating(movieId);
-            movieService.updateMovieDecrementViews(movieId);
-        } catch (final MovieNotFoundException exception) {
-            exception.printStackTrace();
-        }
+        rateService.deleteRate(rateId);
+        movieService.updateMovieUpdateRating(movieId);
+        movieService.updateMovieDecrementViews(movieId);
         return modelAndView;
     }
 
@@ -113,14 +88,10 @@ public class MovieController {
                                    @ModelAttribute("commentContent") final String commentContent,
                                    final HttpServletRequest httpServletRequest) {
         final ModelAndView modelAndView = new ModelAndView("redirect:/movie/" + movieId);
-        try {
-            final User user = userService.findUser(httpServletRequest.getRemoteUser());
-            final Movie movie = movieService.findMovie(movieId);
-            commentService.addComment(commentContent, user, movie);
-            movieService.updateMovieDecrementViews(movieId);
-        } catch (final UserNotFoundException | MovieNotFoundException exception) {
-            exception.printStackTrace();
-        }
+        final Movie movie = movieService.findMovie(movieId);
+        final User user = userService.findUser(httpServletRequest.getRemoteUser());
+        commentService.addComment(commentContent, user, movie);
+        movieService.updateMovieDecrementViews(movieId);
         return modelAndView;
     }
 

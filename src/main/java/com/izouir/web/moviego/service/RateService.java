@@ -5,7 +5,7 @@ import com.izouir.web.moviego.entity.Rate;
 import com.izouir.web.moviego.entity.User;
 
 public interface RateService {
-    Rate findRate(Long movieId, Long userId);
+    Rate findRateIfExists(Long movieId, Long userId);
 
     void addRate(User user, Movie movie, Integer points);
 
