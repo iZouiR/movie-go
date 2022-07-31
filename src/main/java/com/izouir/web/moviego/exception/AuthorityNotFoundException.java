@@ -1,7 +1,7 @@
 package com.izouir.web.moviego.exception;
 
-public class AuthorityNotFoundException extends Exception {
-    public AuthorityNotFoundException(String message) {
+public class AuthorityNotFoundException extends RuntimeException {
+    public AuthorityNotFoundException(final String message) {
         super(message);
     }
 }

@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 public class RateServiceImpl implements RateService {
     private final RateRepository rateRepository;
@@ -22,11 +20,8 @@ public class RateServiceImpl implements RateService {
 
     @Override
     public Rate findRate(final Long movieId, final Long userId) throws RateNotFoundException {
-        final Optional<Rate> foundRate = rateRepository.findByUserIdAndMovieId(userId, movieId);
-        if (foundRate.isEmpty()) {
-            throw new RateNotFoundException(String.format("Rate with movieId=%d and userId=%d was not found", movieId, userId));
-        }
-        return foundRate.get();
+        return rateRepository.findByUserIdAndMovieId(userId, movieId).orElseThrow(
+                () -> new RateNotFoundException("Rate with movieId=" + movieId + " and userId=" + userId + " was not found"));
     }
 
     @Override

@@ -6,8 +6,6 @@ import com.izouir.web.moviego.repository.AuthorityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class AuthorityServiceImpl implements AuthorityService {
     private final AuthorityRepository authorityRepository;
@@ -19,10 +17,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     public Authority findAuthority(final String authority) throws AuthorityNotFoundException {
-        final Optional<Authority> foundAuthority = authorityRepository.findByAuthorityIgnoreCase(authority);
-        if (foundAuthority.isEmpty()) {
-            throw new AuthorityNotFoundException(String.format("Authority with name=%s was not found", authority));
-        }
-        return foundAuthority.get();
+        return authorityRepository.findByAuthorityIgnoreCase(authority).orElseThrow(
+                () -> new AuthorityNotFoundException("Authority with name=" + authority + " was not found"));
     }
 }

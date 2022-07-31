@@ -1,7 +1,7 @@
 package com.izouir.web.moviego.exception;
 
-public class MovieNotFoundException extends Exception {
-    public MovieNotFoundException(String message) {
+public class MovieNotFoundException extends RuntimeException {
+    public MovieNotFoundException(final String message) {
         super(message);
     }
 }

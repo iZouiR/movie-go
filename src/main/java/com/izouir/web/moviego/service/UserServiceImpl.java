@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -22,11 +21,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUser(final String username) throws UserNotFoundException {
-        final Optional<User> foundUser = userRepository.findByUsernameIgnoreCase(username);
-        if (foundUser.isEmpty()) {
-            throw new UserNotFoundException(String.format("User with username=%s was not found", username));
-        }
-        return foundUser.get();
+        return userRepository.findByUsernameIgnoreCase(username).orElseThrow(
+                () -> new UserNotFoundException("User with username=" + username + " was not found"));
     }
 
     @Override
