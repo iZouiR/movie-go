@@ -53,7 +53,7 @@
 <!--search-result-->
 <br>
 <th:block th:if="${!foundMovies.isEmpty()}" th:each="eachMovie : ${foundMovies}">
-    <br><a th:href="@{/movie/{movieId}(movieId=${eachMovie.getId()})}" th:method="GET"
+    <br><a th:href="@{/movie/{movieId}(movieId=${eachMovie.getMovieId()})}" th:method="GET"
            th:text="${eachMovie.getTitle()}"/>
     <span th:text="'('+${eachMovie.getYear()}+')'"/>
     <span th:text="${eachMovie.getRating()}"/>

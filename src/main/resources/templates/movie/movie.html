@@ -27,8 +27,8 @@
 <!--your-rate-input-->
 <br><br>
 <div th:if="${#httpServletRequest.getRemoteUser()} != null">
-    <form th:if="${rate.getId() == 0}" th:action="@{/movie/addRate}" th:method="POST">
-        <input name="movieId" type="hidden" th:value="${movie.getId()}">
+    <form th:if="${rate.getRateId() == 0}" th:action="@{/movie/addRate}" th:method="POST">
+        <input name="movieId" type="hidden" th:value="${movie.getMovieId()}">
 
         <label><input name="ratePoints" type="radio" th:value="1">1</label>
         <label><input name="ratePoints" type="radio" th:value="2">2</label>
@@ -49,9 +49,9 @@
 <!--your-rate-show-->
 <br><br>
 <div th:if="${#httpServletRequest.getRemoteUser()} != null">
-    <form th:if="${rate.getId() != 0}" th:action="@{/movie/deleteRate}" th:method="POST">
-        <input name="movieId" type="hidden" th:value="${movie.getId()}">
-        <input name="rateId" type="hidden" th:value="${rate.getId()}">
+    <form th:if="${rate.getRateId() != 0}" th:action="@{/movie/deleteRate}" th:method="POST">
+        <input name="movieId" type="hidden" th:value="${movie.getMovieId()}">
+        <input name="rateId" type="hidden" th:value="${rate.getRateId()}">
 
         <span>Your rate - </span><span th:text="${rate.getPoints()}"/>
 
@@ -64,7 +64,7 @@
 <br>
 <form th:if="${#httpServletRequest.getRemoteUser()} != null"
       th:action="@{/movie/addComment}" th:method="POST">
-    <input name="movieId" type="hidden" th:value="${movie.getId()}">
+    <input name="movieId" type="hidden" th:value="${movie.getMovieId()}">
 
     <label><textarea name="commentContent" placeholder="Leave a comment" cols="20" rows="3"></textarea></label>
 
@@ -77,13 +77,14 @@
 <th:block th:if="${!movie.getComments().isEmpty()}"
           th:each="eachComment : ${movie.getComments()}">
     <br><br>
+    <span th:text="'{'+${eachComment.getTime().getHours()}+':'+${eachComment.getTime().getMinutes()}+'}'"/>
     <span th:text="'['+${eachComment.getUser().getUsername()}+']'"/>
     <span th:text="${eachComment.getContent()}"/>
     <form th:if="${eachComment.getUser().getUsername().equals(#httpServletRequest.getRemoteUser())}"
           th:action="@{/movie/deleteComment}" th:method="POST"
           style="display: inline-block">
-        <input name="movieId" type="hidden" th:value="${movie.getId()}">
-        <input name="commentId" type="hidden" th:value="${eachComment.getId()}">
+        <input name="movieId" type="hidden" th:value="${movie.getMovieId()}">
+        <input name="commentId" type="hidden" th:value="${eachComment.getCommentId()}">
         <input type="submit" th:value="Delete">
     </form>
 </th:block>

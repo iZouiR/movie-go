@@ -1,6 +1,5 @@
 package com.izouir.web.moviego.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,7 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.util.Collections;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
@@ -23,8 +22,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_generator")
     @SequenceGenerator(name = "user_id_generator", sequenceName = "user_id_generator", allocationSize = 1)
-    @Column(name = "id")
-    private long id;
+    @Column(name = "user_id")
+    private long userId;
 
     @Column(name = "username")
     private String username;
@@ -35,7 +34,7 @@ public class User {
     @Column(name = "enabled")
     private boolean enabled;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_authorities",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -49,7 +48,7 @@ public class User {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private List<Comment> comments = Collections.emptyList();
+    private Set<Comment> comments = new LinkedHashSet<>();
 
     public User() {}
 
@@ -59,12 +58,12 @@ public class User {
         this.enabled = enabled;
     }
 
-    public long getId() {
-        return id;
+    public long getUserId() {
+        return userId;
     }
 
-    public void setId(final long id) {
-        this.id = id;
+    public void setUserId(final long userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {
@@ -107,11 +106,11 @@ public class User {
         this.rates = rates;
     }
 
-    public List<Comment> getComments() {
+    public Set<Comment> getComments() {
         return comments;
     }
 
-    public void setComments(final List<Comment> comments) {
+    public void setComments(final Set<Comment> comments) {
         this.comments = comments;
     }
 }

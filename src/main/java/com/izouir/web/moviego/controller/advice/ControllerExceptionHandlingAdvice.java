@@ -1,6 +1,6 @@
 package com.izouir.web.moviego.controller.advice;
 
-import com.izouir.web.moviego.exception.NotFoundException;
+import com.izouir.web.moviego.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -13,8 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 public class ControllerExceptionHandlingAdvice {
     private static final Logger LOGGER = LoggerFactory.getLogger(ControllerExceptionHandlingAdvice.class);
 
-    @ExceptionHandler(NotFoundException.class)
-    public ModelAndView handleException(final NotFoundException exception) {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ModelAndView handleException(final ResourceNotFoundException exception) {
         LOGGER.error(exception.getMessage());
         final ModelAndView modelAndView = new ModelAndView("error");
         modelAndView.addObject("message", exception.getMessage());

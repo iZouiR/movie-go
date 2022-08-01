@@ -20,8 +20,8 @@ public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "movie_id_generator")
     @SequenceGenerator(name = "movie_id_generator", sequenceName = "movie_id_generator", allocationSize = 1)
-    @Column(name = "id")
-    private long id;
+    @Column(name = "movie_id")
+    private long movieId;
 
     @Column(name = "title")
     private String title;
@@ -60,12 +60,12 @@ public class Movie {
         this.rating = rating;
     }
 
-    public long getId() {
-        return id;
+    public long getMovieId() {
+        return movieId;
     }
 
-    public void setId(final long id) {
-        this.id = id;
+    public void setMovieId(final long movieId) {
+        this.movieId = movieId;
     }
 
     public String getTitle() {

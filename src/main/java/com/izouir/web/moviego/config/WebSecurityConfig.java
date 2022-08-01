@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
 
@@ -22,7 +23,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -48,13 +49,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
-                .passwordEncoder(bCryptPasswordEncoder())
+                .passwordEncoder(passwordEncoder())
                 .usersByUsernameQuery("SELECT username, password, enabled FROM users WHERE username = ?")
                 .authoritiesByUsernameQuery(
                         "SELECT u.username, a.authority " +
                         "FROM users u " +
-                        "JOIN users_authorities ua ON (u.id = ua.user_id) " +
-                        "JOIN authorities a ON (ua.authority_id = a.id) " +
+                        "JOIN users_authorities ua ON (u.user_id = ua.user_id) " +
+                        "JOIN authorities a ON (ua.authority_id = a.authority_id) " +
                         "WHERE username = ?");
     }
 }

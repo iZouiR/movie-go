@@ -20,13 +20,13 @@ public class Authority {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "authority_id_generator")
     @SequenceGenerator(name = "authority_id_generator", sequenceName = "authority_id_generator", allocationSize = 1)
-    @Column(name = "id")
-    private long id;
+    @Column(name = "authority_id")
+    private long authorityId;
 
     @Column(name = "authority")
     private String authority;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_authorities",
             joinColumns = @JoinColumn(name = "authority_id"),
@@ -41,12 +41,12 @@ public class Authority {
         this.authority = authority;
     }
 
-    public long getId() {
-        return id;
+    public long getAuthorityId() {
+        return authorityId;
     }
 
-    public void setId(final long id) {
-        this.id = id;
+    public void setAuthorityId(final long authorityId) {
+        this.authorityId = authorityId;
     }
 
     public String getAuthority() {

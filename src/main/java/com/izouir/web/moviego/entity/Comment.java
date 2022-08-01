@@ -1,6 +1,5 @@
 package com.izouir.web.moviego.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "comments")
@@ -18,35 +18,39 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comment_id_generator")
     @SequenceGenerator(name = "comment_id_generator", sequenceName = "comment_id_generator", allocationSize = 1)
-    @Column(name = "id")
-    private long id;
+    @Column(name = "comment_id")
+    private long commentId;
 
     @Column(name = "content")
     private String content;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @Column(name = "time")
+    private Timestamp time;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "movie_id")
     private Movie movie;
 
     public Comment() {
     }
 
-    public Comment(final String content, final User user, final Movie movie) {
+    public Comment(final String content, final Timestamp time, final User user, final Movie movie) {
         this.content = content;
+        this.time = time;
         this.user = user;
         this.movie = movie;
     }
 
-    public long getId() {
-        return id;
+    public long getCommentId() {
+        return commentId;
     }
 
-    public void setId(final long id) {
-        this.id = id;
+    public void setCommentId(final long commentId) {
+        this.commentId = commentId;
     }
 
     public String getContent() {
@@ -55,6 +59,14 @@ public class Comment {
 
     public void setContent(final String content) {
         this.content = content;
+    }
+
+    public Timestamp getTime() {
+        return time;
+    }
+
+    public void setTime(final Timestamp time) {
+        this.time = time;
     }
 
     public User getUser() {

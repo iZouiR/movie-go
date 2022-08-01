@@ -39,11 +39,11 @@ public class AuthorizationController {
     public ModelAndView registerNewUser(@ModelAttribute("username") final String username,
                                         @ModelAttribute("password") final String password) {
         final ModelAndView modelAndView = new ModelAndView("redirect:/login");
-        if (userService.exists(username)) {
+        if (userService.userExists(username)) {
             modelAndView.addObject("message", "a user with entered username is already exists");
             modelAndView.setViewName("register");
         } else {
-            final Set<Authority> authorities = Collections.singleton(authorityService.findAuthority("ROLE_USER"));
+            final Set<Authority> authorities = Collections.singleton(authorityService.findAuthority(1L));
             userService.saveUser(username, password, true, authorities);
         }
         return modelAndView;

@@ -51,12 +51,15 @@ public class MovieController {
     public ModelAndView openMoviePage(@PathVariable("movieId") final Long movieId,
                                       final HttpServletRequest httpServletRequest) {
         final ModelAndView modelAndView = new ModelAndView("movie/movie");
+        movieService.updateMovieUpdateRating(movieId);
         final Movie movie = movieService.findMovie(movieId);
-        final User user = userService.findUser(httpServletRequest.getRemoteUser());
-        final Rate rate = rateService.findRateIfExists(movieId, user.getId());
+        if (userService.userExists(httpServletRequest.getRemoteUser())) {
+            final User user = userService.findUser(httpServletRequest.getRemoteUser());
+            final Rate rate = rateService.findRateIfExists(user, movie);
+            modelAndView.addObject("rate", rate);
+        }
         movieService.updateMovieIncrementViews(movieId);
         modelAndView.addObject("movie", movie);
-        modelAndView.addObject("rate", rate);
         return modelAndView;
     }
 
@@ -68,7 +71,6 @@ public class MovieController {
         final Movie movie = movieService.findMovie(movieId);
         final User user = userService.findUser(httpServletRequest.getRemoteUser());
         rateService.addRate(user, movie, ratePoints);
-        movieService.updateMovieUpdateRating(movieId);
         movieService.updateMovieDecrementViews(movieId);
         return modelAndView;
     }
@@ -78,7 +80,6 @@ public class MovieController {
                                    @ModelAttribute("rateId") final Long rateId) {
         final ModelAndView modelAndView = new ModelAndView("redirect:/movie/" + movieId);
         rateService.deleteRate(rateId);
-        movieService.updateMovieUpdateRating(movieId);
         movieService.updateMovieDecrementViews(movieId);
         return modelAndView;
     }

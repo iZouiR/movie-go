@@ -17,14 +17,14 @@ public class Rate {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rate_id_generator")
     @SequenceGenerator(name = "rate_id_generator", sequenceName = "rate_id_generator", allocationSize = 1)
-    @Column(name = "id")
-    private long id;
+    @Column(name = "rate_id")
+    private long rateId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "movie_id")
     private Movie movie;
 
@@ -40,12 +40,12 @@ public class Rate {
         this.points = points;
     }
 
-    public long getId() {
-        return id;
+    public long getRateId() {
+        return rateId;
     }
 
-    public void setId(final long id) {
-        this.id = id;
+    public void setRateId(final long rateId) {
+        this.rateId = rateId;
     }
 
     public User getUser() {
