@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Movies</title>
+</head>
+
+<body>
+
+<!--authorization-->
+<header>
+    <div>
+        <span th:if="${#httpServletRequest.getRemoteUser()} != null"
+              th:text="'Hello, '+${#httpServletRequest.getRemoteUser()}">
+        </span>
+
+        <form th:if="${#httpServletRequest.getRemoteUser()} == null"
+              th:action="@{/login}" th:method="GET"
+              style="display: inline-block">
+            <input type="submit" value="Log In">
+        </form>
+
+        <form th:if="${#httpServletRequest.getRemoteUser()} == null"
+              th:action="@{/register}" th:method="GET"
+              style="display: inline-block">
+            <input type="submit" value="Register">
+        </form>
+
+        <form th:if="${#httpServletRequest.getRemoteUser()} != null"
+              th:action="@{/logout}" th:method="POST"
+              style="display: inline-block">
+            <input type="submit" value="Log Out">
+        </form>
+    </div>
+</header>
+<!---->
+
+<!--search-->
+<h1>MovieGo</h1>
+
+<br>
+<form th:action="@{/movie/}" th:method="GET">
+    <label>
+        <input name="searchContent" type="text" placeholder="Enter a movie title" th:value="${searchContent}">
+    </label>
+
+    <br><input type="submit" value="Search">
+</form>
+<!---->
+
+<!--search-result-->
+<br>
+<th:block th:if="${!foundMovies.isEmpty()}" th:each="eachMovie : ${foundMovies}">
+    <br><a th:href="@{/movie/{movieId}(movieId=${eachMovie.getMovieId()})}" th:method="GET"
+           th:text="${eachMovie.getTitle()}"/>
+    <span th:text="'('+${eachMovie.getYear()}+')'"/>
+    <span th:text="${eachMovie.getRating()}"/>
+</th:block>
+
+<br>
+<div th:if="${foundMovies.isEmpty()}">Nothing was found...</div>
+<!---->
+</body>
+
+</html>
