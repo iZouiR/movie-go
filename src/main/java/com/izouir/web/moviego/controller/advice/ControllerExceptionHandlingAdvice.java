@@ -16,6 +16,7 @@ public class ControllerExceptionHandlingAdvice {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ModelAndView handleException(final ResourceNotFoundException exception) {
         LOGGER.error(exception.getMessage());
+        LOGGER.error(exception.getCause().getMessage());
         final ModelAndView modelAndView = new ModelAndView("error");
         modelAndView.addObject("message", exception.getMessage());
         modelAndView.addObject("status", HttpStatus.NOT_FOUND);
